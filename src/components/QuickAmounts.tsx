@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { triggerHapticLight } from '../utils/haptics';
 import { quickAmountsStyles as styles } from '../styles/quickAmounts.styles';
@@ -15,18 +15,32 @@ export function QuickAmounts({
 }: QuickAmountsProps) {
   const [pressedIndex, setPressedIndex] = useState<number | null>(null);
   const t = quickAmountsTranslations[language];
-  const dynamicStyles = getQuickAmountsDynamicStyles(isDark);
 
-  const handlePress = (amount: number, index: number) => {
-    setPressedIndex(index);
-    triggerHapticLight();
+  // Мемоизирани динамични стилове
+  const dynamicStyles = useMemo(
+    () => getQuickAmountsDynamicStyles(isDark),
+    [isDark]
+  );
 
-    setTimeout(() => {
-      setPressedIndex(null);
-    }, 150);
+  const handlePress = useCallback(
+    (amount: number, index: number) => {
+      setPressedIndex(index);
+      triggerHapticLight();
 
-    onSelect(amount);
-  };
+      setTimeout(() => {
+        setPressedIndex(null);
+      }, 150);
+
+      onSelect(amount);
+    },
+    [onSelect]
+  );
+
+  // Мемоизиран символ на валутата
+  const currencySymbol = useMemo(
+    () => (currency === 'BGN' ? t.lv : t.euro),
+    [currency, t]
+  );
 
   return (
     <View style={styles.container}>
@@ -62,7 +76,7 @@ export function QuickAmounts({
                   : dynamicStyles.currencyNormal,
               ]}
             >
-              {currency === 'BGN' ? t.lv : t.euro}
+              {currencySymbol}
             </Text>
           </TouchableOpacity>
         ))}

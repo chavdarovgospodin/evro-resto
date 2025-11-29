@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { View, Animated, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { formatAmount } from '../utils/formatter';
@@ -22,7 +22,12 @@ export function ChangeDisplay({
   const [breakdownCurrency, setBreakdownCurrency] =
     useState<CurrencyType>('BGN');
   const t = changeDisplayTranslations[language];
-  const dynamicStyles = getChangeDisplayDynamicStyles(isDark);
+
+  // Мемоизирани динамични стилове
+  const dynamicStyles = useMemo(
+    () => getChangeDisplayDynamicStyles(isDark),
+    [isDark]
+  );
 
   useEffect(() => {
     if (changeBgn > 0 || changeEur > 0) {
@@ -40,10 +45,27 @@ export function ChangeDisplay({
     }
   }, [changeBgn, changeEur, fadeAnim]);
 
-  const toggleBreakdownCurrency = () => {
+  const toggleBreakdownCurrency = useCallback(() => {
     triggerHapticLight();
     setBreakdownCurrency((prev) => (prev === 'BGN' ? 'EUR' : 'BGN'));
-  };
+  }, []);
+
+  // Мемоизирано изчисление на разбивката по деноминации
+  const currentAmount = breakdownCurrency === 'BGN' ? changeBgn : changeEur;
+  const denominations = useMemo(
+    () => getDenominationBreakdown(currentAmount, breakdownCurrency),
+    [currentAmount, breakdownCurrency]
+  );
+
+  // Мемоизирани стрингове за валута
+  const currencyInfo = useMemo(
+    () => ({
+      symbol: breakdownCurrency === 'BGN' ? t.lv : t.euroSymbol,
+      name: breakdownCurrency === 'BGN' ? t.leva : t.euro,
+      otherName: breakdownCurrency === 'BGN' ? t.euro : t.leva,
+    }),
+    [breakdownCurrency, t]
+  );
 
   if (changeBgn === 0 && changeEur === 0) {
     return (
@@ -62,15 +84,6 @@ export function ChangeDisplay({
       </Animated.View>
     );
   }
-
-  const currentAmount = breakdownCurrency === 'BGN' ? changeBgn : changeEur;
-  const denominations = getDenominationBreakdown(
-    currentAmount,
-    breakdownCurrency
-  );
-  const currencySymbol = breakdownCurrency === 'BGN' ? t.lv : t.euroSymbol;
-  const currencyName = breakdownCurrency === 'BGN' ? t.leva : t.euro;
-  const otherCurrencyName = breakdownCurrency === 'BGN' ? t.euro : t.leva;
 
   return (
     <Animated.View style={{ opacity: fadeAnim }}>
@@ -116,7 +129,7 @@ export function ChangeDisplay({
                   dynamicStyles.denominationsTitle,
                 ]}
               >
-                {t.breakdownIn} {currencyName}:
+                {t.breakdownIn} {currencyInfo.name}:
               </Text>
               <TouchableOpacity
                 style={[styles.switchButton, dynamicStyles.switchButton]}
@@ -128,7 +141,7 @@ export function ChangeDisplay({
                     dynamicStyles.switchButtonText,
                   ]}
                 >
-                  {t.showIn} {otherCurrencyName} →
+                  {t.showIn} {currencyInfo.otherName} →
                 </Text>
               </TouchableOpacity>
             </View>
@@ -169,7 +182,9 @@ export function ChangeDisplay({
                       ? `${Math.round(item.denomination * 100)} ${
                           breakdownCurrency === 'BGN' ? t.stotinki : t.cents
                         }`
-                      : `${formatAmount(item.denomination)} ${currencySymbol}`}
+                      : `${formatAmount(item.denomination)} ${
+                          currencyInfo.symbol
+                        }`}
                   </Text>
                 </View>
               ))}
