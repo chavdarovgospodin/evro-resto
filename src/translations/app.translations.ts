@@ -4,7 +4,7 @@ export const translations: Record<LanguageType, Record<string, string>> = {
   bg: {
     // Заглавия
     'app.title': 'Евро Ресто',
-    'app.subtitle': 'Ресто в лева и евро',
+    'app.subtitle': 'Изчисли рестото',
     'app.version': 'Евро Ресто v1.0.0',
 
     // Калкулатор
@@ -54,7 +54,7 @@ export const translations: Record<LanguageType, Record<string, string>> = {
   en: {
     // Titles
     'app.title': 'Euro Change',
-    'app.subtitle': 'Change in Leva and Euro',
+    'app.subtitle': 'Calculate Change',
     'app.version': 'Euro Change v1.0.0',
 
     // Calculator

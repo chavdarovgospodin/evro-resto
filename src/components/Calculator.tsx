@@ -257,10 +257,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
         </View>
 
         <View style={styles.header}>
-          <Text style={styles.title}>{t('app.title')}</Text>
-          <Text style={[styles.subtitle, memoizedDynamicStyles.secondaryText]}>
-            {t('app.subtitle')}
-          </Text>
+          <Text style={styles.title}>{t('app.subtitle')}</Text>
         </View>
 
         <View style={styles.currencySelector}>
