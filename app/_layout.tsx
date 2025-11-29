@@ -1,9 +1,12 @@
+import { useCallback } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { ErrorBoundary } from 'react-error-boundary';
 import { AppProvider, useApp } from '../src/context/AppContext';
+import { ErrorFallback } from '../src/components/ErrorFallback';
 
 function RootLayoutNav() {
   const { isLoading, isDark } = useApp();
@@ -54,14 +57,33 @@ function RootLayoutNav() {
 }
 
 export default function RootLayout() {
+  const handleError = useCallback(
+    (error: Error, info: { componentStack?: string | null }) => {
+      // Тук може да се добави logging към external service (Sentry, etc.)
+      console.error('App Error:', error);
+      console.error('Component Stack:', info.componentStack);
+    },
+    []
+  );
+
+  const handleReset = useCallback(() => {
+    // Reset app state if needed
+  }, []);
+
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <AppProvider>
-        <SafeAreaProvider>
-          <RootLayoutNav />
-        </SafeAreaProvider>
-      </AppProvider>
-    </GestureHandlerRootView>
+    <ErrorBoundary
+      FallbackComponent={ErrorFallback}
+      onError={handleError}
+      onReset={handleReset}
+    >
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <AppProvider>
+          <SafeAreaProvider>
+            <RootLayoutNav />
+          </SafeAreaProvider>
+        </AppProvider>
+      </GestureHandlerRootView>
+    </ErrorBoundary>
   );
 }
 
