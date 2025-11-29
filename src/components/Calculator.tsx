@@ -663,7 +663,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   clearButtonEnabled: {
-    backgroundColor: '#754202',
+    backgroundColor: '#7e44e3',
   },
   clearButtonDisabled: {
     backgroundColor: '#F3F4F6',
