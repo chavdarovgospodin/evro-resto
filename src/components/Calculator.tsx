@@ -34,11 +34,12 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
   const { currency: defaultCurrency, theme, language } = settings;
   const isDark = theme === 'dark';
   const insets = useSafeAreaInsets();
-  
+
   // На iOS използваме safe area insets, на Android използваме StatusBar height
-  const topPadding = Platform.OS === 'ios' 
-    ? Math.max(insets.top, 20) + 10  // iOS: safe area + малко допълнително
-    : (RNStatusBar.currentHeight || 24) + 10;  // Android: status bar height + малко допълнително
+  const topPadding =
+    Platform.OS === 'ios'
+      ? Math.max(insets.top, 20) + 10 // iOS: safe area + малко допълнително
+      : (RNStatusBar.currentHeight || 24) + 10; // Android: status bar height + малко допълнително
 
   // Запазваме оригиналните стойности в BGN за да избегнем грешки при закръгляване
   const [receivedBgn, setReceivedBgn] = useState<number>(0);
@@ -97,7 +98,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
     }
 
     setReceived(filteredText);
-    
+
     // Запазваме стойността в BGN
     const numValue = parseCurrencyString(filteredText);
     if (primaryCurrency === 'BGN') {
@@ -124,7 +125,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
     }
 
     setBill(filteredText);
-    
+
     // Запазваме стойността в BGN
     const numValue = parseCurrencyString(filteredText);
     if (primaryCurrency === 'BGN') {
@@ -159,7 +160,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
   // Обща функция за смяна на валута с превалутиране
   const switchToCurrency = (newCurrency: CurrencyType) => {
     if (newCurrency === primaryCurrency) return;
-    
+
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     } catch (e) {
@@ -168,16 +169,14 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
 
     // Конвертираме от запазените BGN стойности за да избегнем натрупване на грешки
     if (receivedBgn > 0) {
-      const converted = newCurrency === 'EUR' 
-        ? convertBgnToEur(receivedBgn) 
-        : receivedBgn;
+      const converted =
+        newCurrency === 'EUR' ? convertBgnToEur(receivedBgn) : receivedBgn;
       setReceived(formatAmount(converted));
     }
 
     if (billBgn > 0) {
-      const converted = newCurrency === 'EUR' 
-        ? convertBgnToEur(billBgn) 
-        : billBgn;
+      const converted =
+        newCurrency === 'EUR' ? convertBgnToEur(billBgn) : billBgn;
       setBill(formatAmount(converted));
     }
 
@@ -251,7 +250,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
         style={styles.scrollView}
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingTop: topPadding }
+          { paddingTop: topPadding },
         ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
@@ -259,7 +258,9 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
         {/* Горна лента: курс вляво, настройки вдясно */}
         <View style={styles.topBar}>
           <View style={[styles.exchangeRateBadge, dynamicStyles.exchangeRate]}>
-            <Text style={[styles.exchangeRateText, dynamicStyles.secondaryText]}>
+            <Text
+              style={[styles.exchangeRateText, dynamicStyles.secondaryText]}
+            >
               {t('calc.exchangeRate')}
             </Text>
           </View>
@@ -268,8 +269,12 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
               style={[styles.settingsButton, dynamicStyles.settingsButton]}
               onPress={handleOpenSettings}
               activeOpacity={0.7}
-           >
-              <Ionicons name="settings-outline" size={22} color={isDark ? '#9CA3AF' : '#6B7280'} />
+            >
+              <Ionicons
+                name="settings-outline"
+                size={22}
+                color={isDark ? '#9CA3AF' : '#6B7280'}
+              />
             </TouchableOpacity>
           )}
         </View>
@@ -293,7 +298,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
             ]}
             onPress={() => switchToCurrency('BGN')}
             activeOpacity={0.7}
-         >
+          >
             <Text
               style={[
                 styles.currencyButtonText,
@@ -301,7 +306,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                   ? styles.currencyButtonTextActive
                   : dynamicStyles.text,
               ]}
-           >
+            >
               🇧🇬 {t('currency.bgn')}
             </Text>
           </TouchableOpacity>
@@ -310,8 +315,12 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
             style={[styles.swapButton, dynamicStyles.swapButton]}
             onPress={handleCurrencySwap}
             activeOpacity={0.7}
-         >
-            <Ionicons name="swap-horizontal" size={24} color={isDark ? '#A78BFA' : '#7C3AED'} />
+          >
+            <Ionicons
+              name="swap-horizontal"
+              size={24}
+              color={isDark ? '#A78BFA' : '#7C3AED'}
+            />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -323,7 +332,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
             ]}
             onPress={() => switchToCurrency('EUR')}
             activeOpacity={0.7}
-         >
+          >
             <Text
               style={[
                 styles.currencyButtonText,
@@ -331,7 +340,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                   ? styles.currencyButtonTextActive
                   : dynamicStyles.text,
               ]}
-           >
+            >
               🇪🇺 {t('currency.eur')}
             </Text>
           </TouchableOpacity>
@@ -339,86 +348,91 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
 
         {/* Input полета */}
         <View style={styles.inputsContainer}>
-            {/* Поле Получих */}
-            <View style={styles.inputGroup}>
-              <Text style={[styles.inputLabel, dynamicStyles.text]}>
-                {t('calc.received')}
-              </Text>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                  ref={receivedInputRef}
-                  style={[
-                    styles.input,
-                    dynamicStyles.input,
-                    receivedFocused && styles.inputFocused,
-                  ]}
-                  value={received}
-                  onChangeText={handleReceivedChange}
-                  onFocus={() => setReceivedFocused(true)}
-                  onBlur={() => setReceivedFocused(false)}
-                  placeholder="0.00"
-                  placeholderTextColor="#9CA3AF"
-                  keyboardType="numeric"
-                />
-                <Text
-                  style={[styles.currencySymbol, dynamicStyles.secondaryText]}
-               >
-                  {primaryCurrency === 'BGN'
-                    ? t('currency.lv')
-                    : t('currency.euro')}
-                </Text>
-              </View>
-              <QuickAmounts
-                amounts={[5, 10, 20, 50, 100]}
-                onSelect={handleReceivedQuickAmount}
-                currency={primaryCurrency}
-                isDark={isDark}
-                language={language}
+          {/* Поле Получих */}
+          <View style={styles.inputGroup}>
+            <Text style={[styles.inputLabel, dynamicStyles.text]}>
+              {t('calc.received')}
+            </Text>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                ref={receivedInputRef}
+                style={[
+                  styles.input,
+                  dynamicStyles.input,
+                  receivedFocused && styles.inputFocused,
+                ]}
+                value={received}
+                onChangeText={handleReceivedChange}
+                onFocus={() => setReceivedFocused(true)}
+                onBlur={() => setReceivedFocused(false)}
+                placeholder="0.00"
+                placeholderTextColor="#9CA3AF"
+                keyboardType="numeric"
               />
+              <Text
+                style={[styles.currencySymbol, dynamicStyles.secondaryText]}
+              >
+                {primaryCurrency === 'BGN'
+                  ? t('currency.lv')
+                  : t('currency.euro')}
+              </Text>
             </View>
+            <QuickAmounts
+              amounts={[5, 10, 20, 50, 100]}
+              onSelect={handleReceivedQuickAmount}
+              currency={primaryCurrency}
+              isDark={isDark}
+              language={language}
+            />
+          </View>
 
-            {/* Поле Сметка */}
-            <View style={styles.inputGroup}>
-              <Text style={[styles.inputLabel, dynamicStyles.text]}>
-                {t('calc.bill')}
-              </Text>
-              <View style={styles.inputWrapper}>
-                <TextInput
-                  ref={billInputRef}
-                  style={[
-                    styles.input,
-                    dynamicStyles.input,
-                    billFocused && styles.inputFocused,
-                  ]}
-                  value={bill}
-                  onChangeText={handleBillChange}
-                  onFocus={() => setBillFocused(true)}
-                  onBlur={() => setBillFocused(false)}
-                  placeholder="0.00"
-                  placeholderTextColor="#9CA3AF"
-                  keyboardType="numeric"
-                />
-                <Text
-                  style={[styles.currencySymbol, dynamicStyles.secondaryText]}
-                >
-                  {primaryCurrency === 'BGN'
-                    ? t('currency.lv')
-                    : t('currency.euro')}
-                </Text>
-              </View>
-              <QuickAmounts
-                amounts={[5, 10, 20, 50, 100]}
-                onSelect={handleBillQuickAmount}
-                currency={primaryCurrency}
-                isDark={isDark}
-                language={language}
+          {/* Поле Сметка */}
+          <View style={styles.inputGroup}>
+            <Text style={[styles.inputLabel, dynamicStyles.text]}>
+              {t('calc.bill')}
+            </Text>
+            <View style={styles.inputWrapper}>
+              <TextInput
+                ref={billInputRef}
+                style={[
+                  styles.input,
+                  dynamicStyles.input,
+                  billFocused && styles.inputFocused,
+                ]}
+                value={bill}
+                onChangeText={handleBillChange}
+                onFocus={() => setBillFocused(true)}
+                onBlur={() => setBillFocused(false)}
+                placeholder="0.00"
+                placeholderTextColor="#9CA3AF"
+                keyboardType="numeric"
               />
+              <Text
+                style={[styles.currencySymbol, dynamicStyles.secondaryText]}
+              >
+                {primaryCurrency === 'BGN'
+                  ? t('currency.lv')
+                  : t('currency.euro')}
+              </Text>
             </View>
+            <QuickAmounts
+              amounts={[5, 10, 20, 50, 100]}
+              onSelect={handleBillQuickAmount}
+              currency={primaryCurrency}
+              isDark={isDark}
+              language={language}
+            />
+          </View>
 
           {/* Грешка */}
           {error && (
             <View style={styles.errorContainer}>
-              <Ionicons name="warning-outline" size={18} color="#EF4444" style={styles.errorIcon} />
+              <Ionicons
+                name="warning-outline"
+                size={18}
+                color="#EF4444"
+                style={styles.errorIcon}
+              />
               <Text style={styles.errorText}>{error}</Text>
             </View>
           )}
@@ -441,8 +455,13 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                   styles.noChangeContainer,
                   isDark && styles.noChangeContainerDark,
                 ]}
-             >
-                <Ionicons name="checkmark-circle" size={20} color="#10B981" style={{ marginRight: 8 }} />
+              >
+                <Ionicons
+                  name="checkmark-circle"
+                  size={20}
+                  color="#10B981"
+                  style={{ marginRight: 8 }}
+                />
                 <Text style={styles.noChangeText}>{t('change.noChange')}</Text>
               </View>
             ))}
@@ -460,7 +479,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
             onPress={handleClear}
             disabled={!hasContent}
             activeOpacity={0.7}
-         >
+          >
             <Text
               style={[
                 styles.clearButtonText,
@@ -468,11 +487,11 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                   ? styles.clearButtonTextEnabled
                   : styles.clearButtonTextDisabled,
               ]}
-           >
+            >
               {t('calc.clear')}
-              </Text>
-            </TouchableOpacity>
-          </View>
+            </Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -496,7 +515,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   exchangeRateBadge: {
     paddingHorizontal: 12,
@@ -517,13 +536,13 @@ const styles = StyleSheet.create({
   // Заглавие
   header: {
     alignItems: 'center',
-    marginBottom: 28,
+    marginBottom: 22,
   },
   title: {
     fontSize: 34,
     fontWeight: '700',
     color: '#7C3AED',
-    marginBottom: 6,
+    marginBottom: 8,
   },
   subtitle: {
     fontSize: 15,
@@ -533,7 +552,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 28,
+    marginBottom: 20,
     gap: 10,
   },
   currencyButton: {
@@ -571,7 +590,7 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   inputGroup: {
-    marginBottom: 24,
+    marginBottom: 18,
   },
   inputLabel: {
     fontSize: 17,
