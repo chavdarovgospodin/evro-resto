@@ -31,7 +31,7 @@ export const getAllDenominations = (currency: 'BGN' | 'EUR') => {
  */
 export const isDenominationBanknote = (value: number, currency: 'BGN' | 'EUR'): boolean => {
   const denominations = currency === 'BGN' ? BGN_DENOMINATIONS : EUR_DENOMINATIONS;
-  return denominations.banknotes.includes(value);
+  return (denominations.banknotes as readonly number[]).includes(value);
 };
 
 /**
