@@ -15,7 +15,6 @@ import { ChangeDisplay } from './ChangeDisplay';
 import { QuickAmounts } from './QuickAmounts';
 import {
   calculateChange,
-  getDenominationBreakdown,
   parseCurrencyString,
   convertBgnToEur,
   convertEurToBgn,
@@ -39,11 +38,6 @@ export function Calculator() {
     parseCurrencyString(received),
     parseCurrencyString(bill)
   );
-
-  const denominationBreakdown =
-    changeResult.isValid && changeResult.bgn > 0
-      ? getDenominationBreakdown(changeResult.bgn, 'BGN')
-      : [];
 
   useEffect(() => {
     if (!changeResult.isValid && changeResult.error) {
@@ -287,7 +281,6 @@ export function Calculator() {
               <ChangeDisplay
                 changeBgn={changeResult.bgn}
                 changeEur={changeResult.eur}
-                denominations={denominationBreakdown}
                 primaryCurrency={primaryCurrency}
               />
             ) : (
