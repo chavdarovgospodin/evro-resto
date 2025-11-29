@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Haptics from 'expo-haptics';
+import { Ionicons } from '@expo/vector-icons';
 import { useApp, CurrencyType, LanguageType, ThemeType } from '../context/AppContext';
 
 export function Settings() {
@@ -171,7 +172,11 @@ export function Settings() {
               ]}
               onPress={() => handleThemeChange('light')}
             >
-              <Text style={styles.optionIcon}>☀️</Text>
+              <Ionicons 
+                name="sunny-outline" 
+                size={20} 
+                color={theme === 'light' ? '#FFFFFF' : (isDark ? '#F9FAFB' : '#1F2937')} 
+              />
               <Text
                 style={[
                   styles.optionText,
@@ -188,7 +193,11 @@ export function Settings() {
               ]}
               onPress={() => handleThemeChange('dark')}
             >
-              <Text style={styles.optionIcon}>🌙</Text>
+              <Ionicons 
+                name="moon-outline" 
+                size={20} 
+                color={theme === 'dark' ? '#FFFFFF' : (isDark ? '#F9FAFB' : '#1F2937')} 
+              />
               <Text
                 style={[
                   styles.optionText,

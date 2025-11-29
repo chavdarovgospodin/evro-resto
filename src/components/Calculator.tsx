@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Haptics from 'expo-haptics';
+import { Ionicons } from '@expo/vector-icons';
 import { ChangeDisplay } from './ChangeDisplay';
 import { QuickAmounts } from './QuickAmounts';
 import {
@@ -30,6 +31,9 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
   const { currency: defaultCurrency, theme, language } = settings;
   const isDark = theme === 'dark';
 
+  // Запазваме оригиналните стойности в BGN за да избегнем грешки при закръгляване
+  const [receivedBgn, setReceivedBgn] = useState<number>(0);
+  const [billBgn, setBillBgn] = useState<number>(0);
   const [received, setReceived] = useState('');
   const [bill, setBill] = useState('');
   const [primaryCurrency, setPrimaryCurrency] =
@@ -84,6 +88,14 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
     }
 
     setReceived(filteredText);
+    
+    // Запазваме стойността в BGN
+    const numValue = parseCurrencyString(filteredText);
+    if (primaryCurrency === 'BGN') {
+      setReceivedBgn(numValue);
+    } else {
+      setReceivedBgn(convertEurToBgn(numValue));
+    }
   };
 
   const handleBillChange = (text: string) => {
@@ -103,16 +115,36 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
     }
 
     setBill(filteredText);
+    
+    // Запазваме стойността в BGN
+    const numValue = parseCurrencyString(filteredText);
+    if (primaryCurrency === 'BGN') {
+      setBillBgn(numValue);
+    } else {
+      setBillBgn(convertEurToBgn(numValue));
+    }
   };
 
   const handleReceivedQuickAmount = (amount: number) => {
     const formatted = formatAmount(amount);
     setReceived(formatted);
+    // Запазваме в BGN
+    if (primaryCurrency === 'BGN') {
+      setReceivedBgn(amount);
+    } else {
+      setReceivedBgn(convertEurToBgn(amount));
+    }
   };
 
   const handleBillQuickAmount = (amount: number) => {
     const formatted = formatAmount(amount);
     setBill(formatted);
+    // Запазваме в BGN
+    if (primaryCurrency === 'BGN') {
+      setBillBgn(amount);
+    } else {
+      setBillBgn(convertEurToBgn(amount));
+    }
   };
 
   const handleCurrencySwap = () => {
@@ -124,26 +156,19 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
 
     const newCurrency = primaryCurrency === 'BGN' ? 'EUR' : 'BGN';
 
-    if (received) {
-      const receivedNum = parseCurrencyString(received);
-      if (receivedNum > 0) {
-        const converted =
-          newCurrency === 'EUR'
-            ? convertBgnToEur(receivedNum)
-            : convertEurToBgn(receivedNum);
-        setReceived(converted.toFixed(2));
-      }
+    // Конвертираме от запазените BGN стойности за да избегнем натрупване на грешки
+    if (receivedBgn > 0) {
+      const converted = newCurrency === 'EUR' 
+        ? convertBgnToEur(receivedBgn) 
+        : receivedBgn;
+      setReceived(formatAmount(converted));
     }
 
-    if (bill) {
-      const billNum = parseCurrencyString(bill);
-      if (billNum > 0) {
-        const converted =
-          newCurrency === 'EUR'
-            ? convertBgnToEur(billNum)
-            : convertEurToBgn(billNum);
-        setBill(converted.toFixed(2));
-      }
+    if (billBgn > 0) {
+      const converted = newCurrency === 'EUR' 
+        ? convertBgnToEur(billBgn) 
+        : billBgn;
+      setBill(formatAmount(converted));
     }
 
     setPrimaryCurrency(newCurrency);
@@ -152,6 +177,8 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
   const handleClear = () => {
     setReceived('');
     setBill('');
+    setReceivedBgn(0);
+    setBillBgn(0);
     setError('');
     Keyboard.dismiss();
   };
@@ -202,7 +229,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
           style={[styles.settingsButton, dynamicStyles.settingsButton]}
           onPress={onOpenSettings}
         >
-          <Text style={styles.settingsButtonText}>⚙️</Text>
+          <Ionicons name="settings-outline" size={24} color={isDark ? '#9CA3AF' : '#6B7280'} />
         </TouchableOpacity>
       )}
 
@@ -256,7 +283,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
             style={[styles.swapButton, dynamicStyles.swapButton]}
             onPress={handleCurrencySwap}
           >
-            <Text style={styles.swapButtonText}>⇄</Text>
+            <Ionicons name="swap-horizontal" size={24} color={isDark ? '#A78BFA' : '#7C3AED'} />
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -362,7 +389,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
           {/* Грешка */}
           {error && (
             <View style={styles.errorContainer}>
-              <Text style={styles.errorIcon}>⚠️</Text>
+              <Ionicons name="warning-outline" size={18} color="#EF4444" style={styles.errorIcon} />
               <Text style={styles.errorText}>{error}</Text>
             </View>
           )}
@@ -386,6 +413,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                   isDark && styles.noChangeContainerDark,
                 ]}
               >
+                <Ionicons name="checkmark-circle" size={20} color="#10B981" style={{ marginRight: 8 }} />
                 <Text style={styles.noChangeText}>{t('change.noChange')}</Text>
               </View>
             ))}
@@ -554,7 +582,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   errorIcon: {
-    fontSize: 16,
     marginRight: 8,
   },
   errorText: {
@@ -563,10 +590,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   noChangeContainer: {
+    flexDirection: 'row',
     backgroundColor: '#F0FDF4',
     borderRadius: 14,
     padding: 18,
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 20,
   },
   noChangeContainerDark: {

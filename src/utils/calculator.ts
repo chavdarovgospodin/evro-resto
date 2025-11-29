@@ -7,7 +7,7 @@ import {
   getAllDenominations,
   isDenominationBanknote,
   type DenominationBreakdown,
-  type CurrencyType
+  type CurrencyType,
 } from '../constants/currency';
 
 /**
@@ -22,13 +22,16 @@ export function convertBgnToEur(bgn: number): number {
  * Преобразува евро в лева
  */
 export function convertEurToBgn(eur: number): number {
-  return Math.round((eur * BGN_TO_EUR_RATE) * 100) / 100;
+  return Math.round(eur * BGN_TO_EUR_RATE * 100) / 100;
 }
 
 /**
  * Изчислява рестото в двете валути
  */
-export function calculateChange(received: number, bill: number): {
+export function calculateChange(
+  received: number,
+  bill: number
+): {
   bgn: number;
   eur: number;
   isValid: boolean;
@@ -39,7 +42,7 @@ export function calculateChange(received: number, bill: number): {
     return {
       bgn: 0,
       eur: 0,
-      isValid: true
+      isValid: true,
     };
   }
 
@@ -49,7 +52,7 @@ export function calculateChange(received: number, bill: number): {
       bgn: 0,
       eur: 0,
       isValid: false,
-      error: 'Недостатъчна сума'
+      error: 'Недостатъчна сума',
     };
   }
 
@@ -59,7 +62,7 @@ export function calculateChange(received: number, bill: number): {
       bgn: 0,
       eur: 0,
       isValid: false,
-      error: 'Невалидна сметка'
+      error: 'Невалидна сметка',
     };
   }
 
@@ -71,7 +74,7 @@ export function calculateChange(received: number, bill: number): {
     return {
       bgn: 0,
       eur: 0,
-      isValid: true
+      isValid: true,
     };
   }
 
@@ -81,7 +84,7 @@ export function calculateChange(received: number, bill: number): {
   return {
     bgn: changeBgn,
     eur: changeEur,
-    isValid: true
+    isValid: true,
   };
 }
 
@@ -104,9 +107,11 @@ export function getDenominationBreakdown(
         breakdown.push({
           denomination,
           count,
-          type: isDenominationBanknote(denomination, currency) ? 'banknote' : 'coin'
+          type: isDenominationBanknote(denomination, currency)
+            ? 'banknote'
+            : 'coin',
         });
-        remaining = Math.round((remaining - (count * denomination)) * 100) / 100;
+        remaining = Math.round((remaining - count * denomination) * 100) / 100;
       }
     }
   }
@@ -114,9 +119,10 @@ export function getDenominationBreakdown(
   // Ако има остатък който не може да се разбие точно (много рядко)
   if (remaining > 0.001) {
     // Добавяме като стотинки
-    const coinDenominations = currency === 'BGN'
-      ? [0.01, 0.02, 0.05, 0.10, 0.20, 0.50, 1, 2]
-      : [0.01, 0.02, 0.05, 0.10, 0.20, 0.50, 1, 2];
+    const coinDenominations =
+      currency === 'BGN'
+        ? [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2]
+        : [0.01, 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2];
 
     // Намираме най-близката монета
     for (const coin of coinDenominations.sort((a, b) => b - a)) {
@@ -124,7 +130,7 @@ export function getDenominationBreakdown(
         breakdown.push({
           denomination: coin,
           count: 1,
-          type: 'coin'
+          type: 'coin',
         });
         break;
       }
@@ -145,7 +151,7 @@ export function formatCurrency(amount: number, currency: CurrencyType): string {
     style: 'currency',
     currency: currencyCode,
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2
+    maximumFractionDigits: 2,
   }).format(amount);
 }
 
@@ -175,7 +181,11 @@ export function validateAmount(value: string): {
   const amount = parseCurrencyString(value);
 
   if (amount < 0) {
-    return { isValid: false, amount: 0, error: 'Отрицателни суми не са позволени' };
+    return {
+      isValid: false,
+      amount: 0,
+      error: 'Отрицателни суми не са позволени',
+    };
   }
 
   if (amount > 99999.99) {
@@ -185,7 +195,11 @@ export function validateAmount(value: string): {
   // Проверка за повече от 2 цифри след десетичната точка
   const decimalPart = value.split('.')[1];
   if (decimalPart && decimalPart.length > 2) {
-    return { isValid: false, amount: 0, error: 'Максимум 2 цифри след десетичната точка' };
+    return {
+      isValid: false,
+      amount: 0,
+      error: 'Максимум 2 цифри след десетичната точка',
+    };
   }
 
   return { isValid: true, amount };

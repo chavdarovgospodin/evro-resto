@@ -89,7 +89,7 @@ const translations: Record<LanguageType, Record<string, string>> = {
   bg: {
     // Заглавия
     'app.title': 'Евро Ресто',
-    'app.subtitle': 'Калкулатор за ресто при преминаване към евро',
+    'app.subtitle': 'Калкулатор за ресто от евро към лева',
     'app.version': 'Евро Ресто v1.0.0',
 
     // Калкулатор
@@ -137,7 +137,7 @@ const translations: Record<LanguageType, Record<string, string>> = {
   en: {
     // Titles
     'app.title': 'Euro Change',
-    'app.subtitle': 'Change calculator for Euro transition',
+    'app.subtitle': 'Change calculator from Euro to Leva',
     'app.version': 'Euro Change v1.0.0',
 
     // Calculator

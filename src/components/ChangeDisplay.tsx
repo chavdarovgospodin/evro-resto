@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
+import { Ionicons } from '@expo/vector-icons';
 import { formatAmount } from '../utils/formatter';
 import { getDenominationBreakdown } from '../utils/calculator';
 import type { CurrencyType } from '../constants/currency';
@@ -21,8 +22,8 @@ const translations = {
     euro: 'евро',
     breakdownIn: 'Разбивка в',
     showIn: 'Покажи в',
-    noChange: '✅ Точна сума - няма ресто',
-    warning: '⚠️ Проверете сумата - голямо ресто!',
+    noChange: 'Точна сума - няма ресто',
+    warning: 'Проверете сумата - голямо ресто!',
     stotinki: 'ст',
     cents: 'цент',
     lv: 'лв',
@@ -35,8 +36,8 @@ const translations = {
     euro: 'euro',
     breakdownIn: 'Breakdown in',
     showIn: 'Show in',
-    noChange: '✅ Exact amount - no change',
-    warning: '⚠️ Check the amount - large change!',
+    noChange: 'Exact amount - no change',
+    warning: 'Check the amount - large change!',
     stotinki: 'st',
     cents: 'cent',
     lv: 'lv',
@@ -144,7 +145,15 @@ export function ChangeDisplay({
     return (
       <Animated.View style={{ opacity: fadeAnim }}>
         <View style={[styles.container, dynamicStyles.container]}>
-          <Text style={styles.noChangeText}>{t.noChange}</Text>
+          <View style={styles.noChangeRow}>
+            <Ionicons
+              name="checkmark-circle"
+              size={20}
+              color="#10B981"
+              style={{ marginRight: 8 }}
+            />
+            <Text style={styles.noChangeText}>{t.noChange}</Text>
+          </View>
         </View>
       </Animated.View>
     );
@@ -235,11 +244,16 @@ export function ChangeDisplay({
                     dynamicStyles.denominationItem,
                   ]}
                 >
-                  <Text style={styles.denominationIcon}>
-                    {isBanknote(item.denomination, breakdownCurrency)
-                      ? '💵'
-                      : '🪙'}
-                  </Text>
+                  {isBanknote(item.denomination, breakdownCurrency) ? (
+                    <Ionicons
+                      name="cash-outline"
+                      size={16}
+                      color={isDark ? '#6EE7B7' : '#059669'}
+                      style={styles.denominationIcon}
+                    />
+                  ) : (
+                    <Text style={styles.denominationIcon}>🪙</Text>
+                  )}
                   <Text
                     style={[
                       styles.denominationCount,
@@ -269,6 +283,12 @@ export function ChangeDisplay({
         {/* Предупреждение за голямо ресто */}
         {changeBgn > 500 && (
           <View style={styles.warning}>
+            <Ionicons
+              name="alert-circle-outline"
+              size={18}
+              color="#EF4444"
+              style={{ marginRight: 6 }}
+            />
             <Text style={styles.warningText}>{t.warning}</Text>
           </View>
         )}
@@ -321,6 +341,11 @@ const styles = StyleSheet.create({
   dividerText: {
     fontSize: 14,
     fontWeight: '500',
+  },
+  noChangeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   noChangeText: {
     fontSize: 17,
@@ -381,6 +406,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   warning: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: '#FEF2F2',
     borderColor: '#EF4444',
     borderWidth: 1,
