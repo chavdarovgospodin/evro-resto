@@ -7,8 +7,11 @@ import {
   Keyboard,
   StyleSheet,
   TextInput,
+  Platform,
+  StatusBar as RNStatusBar,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { ChangeDisplay } from './ChangeDisplay';
@@ -30,6 +33,12 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
   const { settings, t } = useApp();
   const { currency: defaultCurrency, theme, language } = settings;
   const isDark = theme === 'dark';
+  const insets = useSafeAreaInsets();
+  
+  // На iOS използваме safe area insets, на Android използваме StatusBar height
+  const topPadding = Platform.OS === 'ios' 
+    ? Math.max(insets.top, 20) + 10  // iOS: safe area + малко допълнително
+    : (RNStatusBar.currentHeight || 24) + 10;  // Android: status bar height + малко допълнително
 
   // Запазваме оригиналните стойности в BGN за да избегнем грешки при закръгляване
   const [receivedBgn, setReceivedBgn] = useState<number>(0);
@@ -223,37 +232,38 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
     <View style={[styles.container, dynamicStyles.container]}>
       <StatusBar style={isDark ? 'light' : 'dark'} />
 
-      {/* Settings бутон горе в дясно */}
-      {onOpenSettings && (
-        <TouchableOpacity
-          style={[styles.settingsButton, dynamicStyles.settingsButton]}
-          onPress={onOpenSettings}
-        >
-          <Ionicons name="settings-outline" size={24} color={isDark ? '#9CA3AF' : '#6B7280'} />
-        </TouchableOpacity>
-      )}
-
       <ScrollView
         style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingTop: topPadding }
+        ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
+        {/* Горна лента: курс вляво, настройки вдясно */}
+        <View style={styles.topBar}>
+          <View style={[styles.exchangeRateBadge, dynamicStyles.exchangeRate]}>
+            <Text style={[styles.exchangeRateText, dynamicStyles.secondaryText]}>
+              {t('calc.exchangeRate')}
+            </Text>
+          </View>
+          {onOpenSettings && (
+            <TouchableOpacity
+              style={[styles.settingsButton, dynamicStyles.settingsButton]}
+              onPress={onOpenSettings}
+            >
+              <Ionicons name="settings-outline" size={22} color={isDark ? '#9CA3AF' : '#6B7280'} />
+            </TouchableOpacity>
+          )}
+        </View>
+
         {/* Заглавие */}
         <View style={styles.header}>
           <Text style={styles.title}>{t('app.title')}</Text>
           <Text style={[styles.subtitle, dynamicStyles.secondaryText]}>
             {t('app.subtitle')}
           </Text>
-          <View
-            style={[styles.exchangeRateContainer, dynamicStyles.exchangeRate]}
-          >
-            <Text
-              style={[styles.exchangeRateText, dynamicStyles.secondaryText]}
-            >
-              {t('calc.exchangeRate')}
-            </Text>
-          </View>
         </View>
 
         {/* Валутен селектор */}
@@ -455,49 +465,49 @@ const styles = StyleSheet.create({
   scrollView: {
     flex: 1,
   },
-  settingsButton: {
-    position: 'absolute',
-    top: 50,
-    right: 20,
-    zIndex: 100,
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  settingsButtonText: {
-    fontSize: 22,
-  },
   scrollContent: {
     flexGrow: 1,
     paddingHorizontal: 20,
-    paddingTop: 60,
+    // paddingTop се задава динамично
     paddingBottom: 40,
   },
-  header: {
+  // Горна лента с курс и настройки
+  topBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 16,
   },
-  title: {
-    fontSize: 36,
-    fontWeight: '700',
-    color: '#7C3AED',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  exchangeRateContainer: {
-    marginTop: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
+  exchangeRateBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
   },
   exchangeRateText: {
-    fontSize: 13,
+    fontSize: 12,
     fontWeight: '500',
+  },
+  settingsButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // Заглавие
+  header: {
+    alignItems: 'center',
+    marginBottom: 28,
+  },
+  title: {
+    fontSize: 34,
+    fontWeight: '700',
+    color: '#7C3AED',
+    marginBottom: 6,
+  },
+  subtitle: {
+    fontSize: 15,
+    textAlign: 'center',
   },
   currencySelector: {
     flexDirection: 'row',

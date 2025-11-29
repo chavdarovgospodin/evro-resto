@@ -5,8 +5,11 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Platform,
+  StatusBar as RNStatusBar,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
 import { useApp, CurrencyType, LanguageType, ThemeType } from '../context/AppContext';
@@ -14,6 +17,12 @@ import { useApp, CurrencyType, LanguageType, ThemeType } from '../context/AppCon
 export function Settings() {
   const { settings, setCurrency, setLanguage, setTheme, t } = useApp();
   const { currency, language, theme } = settings;
+  const insets = useSafeAreaInsets();
+  
+  // На iOS използваме safe area insets, на Android използваме StatusBar height
+  const topPadding = Platform.OS === 'ios' 
+    ? Math.max(insets.top, 20) + 10  // iOS: safe area + малко допълнително
+    : (RNStatusBar.currentHeight || 24) + 10;  // Android: status bar height + малко допълнително
 
   const triggerHaptic = () => {
     try {
@@ -65,7 +74,10 @@ export function Settings() {
       <StatusBar style={isDark ? 'light' : 'dark'} />
       <ScrollView
         style={styles.scrollView}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingTop: topPadding + 20 }
+        ]}
         showsVerticalScrollIndicator={false}
       >
         {/* Header */}
@@ -228,7 +240,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     paddingHorizontal: 20,
-    paddingTop: 60,
+    // paddingTop се задава динамично
     paddingBottom: 40,
   },
   header: {

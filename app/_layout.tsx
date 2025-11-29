@@ -38,10 +38,10 @@ function RootLayoutNav() {
         <Stack.Screen
           name="settings"
           options={{
-            presentation: 'fullScreenModal',
-            animation: 'slide_from_bottom',
+            presentation: 'card',
+            animation: 'slide_from_right',
             gestureEnabled: true,
-            gestureDirection: 'vertical',
+            gestureDirection: 'horizontal',
             contentStyle: {
               backgroundColor: bgColor,
             },
