@@ -560,7 +560,7 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     borderRadius: 28,
     borderWidth: 1,
-    minWidth: 115,
+    minWidth: 140,
     alignItems: 'center',
   },
   currencyButtonActive: {
@@ -663,7 +663,7 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
   clearButtonEnabled: {
-    backgroundColor: '#EF4444',
+    backgroundColor: '#754202',
   },
   clearButtonDisabled: {
     backgroundColor: '#F3F4F6',

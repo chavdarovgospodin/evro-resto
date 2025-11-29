@@ -12,66 +12,10 @@ export type CurrencyType = 'BGN' | 'EUR';
 export type LanguageType = 'bg' | 'en';
 export type ThemeType = 'light' | 'dark';
 
-// Цветова палитра
-export const colors = {
-  light: {
-    primary: '#7C3AED', // Лилаво
-    primaryLight: '#EDE9FE', // Светло лилаво
-    primaryDark: '#6D28D9', // Тъмно лилаво
-    background: '#FFFFFF',
-    surface: '#F9FAFB',
-    surfaceAlt: '#F3F4F6',
-    text: '#1F2937',
-    textSecondary: '#6B7280',
-    textMuted: '#9CA3AF',
-    border: '#E5E7EB',
-    error: '#EF4444',
-    success: '#10B981',
-    successBg: '#F0FDF4',
-    successBorder: '#D1FAE5',
-    successText: '#065F46',
-  },
-  dark: {
-    primary: '#A78BFA', // По-мек лилав за тъмна тема
-    primaryLight: '#4C1D95', // Тъмен лилав фон
-    primaryDark: '#8B5CF6', // Среден лилав
-    background: '#1F2937',
-    surface: '#374151',
-    surfaceAlt: '#4B5563',
-    text: '#F9FAFB',
-    textSecondary: '#D1D5DB',
-    textMuted: '#9CA3AF',
-    border: '#4B5563',
-    error: '#F87171',
-    success: '#34D399',
-    successBg: '#065F46',
-    successBorder: '#10B981',
-    successText: '#A7F3D0',
-  },
-};
-
 interface AppSettings {
   currency: CurrencyType;
   language: LanguageType;
   theme: ThemeType;
-}
-
-interface ThemeColors {
-  primary: string;
-  primaryLight: string;
-  primaryDark: string;
-  background: string;
-  surface: string;
-  surfaceAlt: string;
-  text: string;
-  textSecondary: string;
-  textMuted: string;
-  border: string;
-  error: string;
-  success: string;
-  successBg: string;
-  successBorder: string;
-  successText: string;
 }
 
 interface AppContextType {
@@ -81,7 +25,6 @@ interface AppContextType {
   setTheme: (theme: ThemeType) => void;
   t: (key: string) => string;
   isLoading: boolean;
-  themeColors: ThemeColors;
 }
 
 // Преводи
