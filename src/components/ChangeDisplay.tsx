@@ -9,15 +9,47 @@ import {
 import * as Haptics from 'expo-haptics';
 import { formatAmount } from '../utils/formatter';
 import { getDenominationBreakdown } from '../utils/calculator';
-import type {
-  DenominationBreakdown,
-  CurrencyType,
-} from '../constants/currency';
+import type { CurrencyType } from '../constants/currency';
+import type { LanguageType } from '../context/AppContext';
+
+// Преводи
+const translations = {
+  bg: {
+    headerLabel: 'За връщане:',
+    or: 'или',
+    leva: 'лева',
+    euro: 'евро',
+    breakdownIn: 'Разбивка в',
+    showIn: 'Покажи в',
+    noChange: '✅ Точна сума - няма ресто',
+    warning: '⚠️ Проверете сумата - голямо ресто!',
+    stotinki: 'ст',
+    cents: 'цент',
+    lv: 'лв',
+    euroSymbol: '€',
+  },
+  en: {
+    headerLabel: 'Change:',
+    or: 'or',
+    leva: 'leva',
+    euro: 'euro',
+    breakdownIn: 'Breakdown in',
+    showIn: 'Show in',
+    noChange: '✅ Exact amount - no change',
+    warning: '⚠️ Check the amount - large change!',
+    stotinki: 'st',
+    cents: 'cent',
+    lv: 'lv',
+    euroSymbol: '€',
+  },
+};
 
 interface ChangeDisplayProps {
   changeBgn: number;
   changeEur: number;
   primaryCurrency: CurrencyType;
+  isDark?: boolean;
+  language?: LanguageType;
 }
 
 // Функция за определяне дали е банкнота или монета
@@ -33,10 +65,13 @@ export function ChangeDisplay({
   changeBgn,
   changeEur,
   primaryCurrency,
+  isDark = false,
+  language = 'bg',
 }: ChangeDisplayProps) {
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const [breakdownCurrency, setBreakdownCurrency] =
     useState<CurrencyType>('BGN');
+  const t = translations[language];
 
   useEffect(() => {
     if (changeBgn > 0 || changeEur > 0) {
@@ -63,11 +98,53 @@ export function ChangeDisplay({
     setBreakdownCurrency((prev) => (prev === 'BGN' ? 'EUR' : 'BGN'));
   };
 
+  // Динамични стилове за тъмна тема
+  const dynamicStyles = {
+    container: {
+      backgroundColor: isDark ? '#065F46' : '#F0FDF4',
+    },
+    headerLabel: {
+      color: isDark ? '#A7F3D0' : '#065F46',
+    },
+    currencyBox: {
+      backgroundColor: isDark ? '#064E3B' : '#FFFFFF',
+      borderColor: isDark ? '#10B981' : '#D1FAE5',
+    },
+    currencyAmount: {
+      color: isDark ? '#A7F3D0' : '#065F46',
+    },
+    currencyLabel: {
+      color: isDark ? '#6EE7B7' : '#059669',
+    },
+    dividerText: {
+      color: isDark ? '#9CA3AF' : '#6B7280',
+    },
+    denominationsTitle: {
+      color: isDark ? '#A7F3D0' : '#065F46',
+    },
+    switchButton: {
+      backgroundColor: isDark ? '#10B981' : '#D1FAE5',
+    },
+    switchButtonText: {
+      color: isDark ? '#FFFFFF' : '#059669',
+    },
+    denominationItem: {
+      backgroundColor: isDark ? '#064E3B' : '#FFFFFF',
+      borderColor: isDark ? '#10B981' : '#D1FAE5',
+    },
+    denominationCount: {
+      color: isDark ? '#A7F3D0' : '#065F46',
+    },
+    denominationValue: {
+      color: isDark ? '#6EE7B7' : '#059669',
+    },
+  };
+
   if (changeBgn === 0 && changeEur === 0) {
     return (
       <Animated.View style={{ opacity: fadeAnim }}>
-        <View style={styles.container}>
-          <Text style={styles.noChangeText}>✅ Точна сума - няма ресто</Text>
+        <View style={[styles.container, dynamicStyles.container]}>
+          <Text style={styles.noChangeText}>{t.noChange}</Text>
         </View>
       </Animated.View>
     );
@@ -79,35 +156,47 @@ export function ChangeDisplay({
     currentAmount,
     breakdownCurrency
   );
-  const currencySymbol = breakdownCurrency === 'BGN' ? 'лв' : '€';
-  const currencyName = breakdownCurrency === 'BGN' ? 'лева' : 'евро';
-  const otherCurrencyName = breakdownCurrency === 'BGN' ? 'евро' : 'лева';
+  const currencySymbol = breakdownCurrency === 'BGN' ? t.lv : t.euroSymbol;
+  const currencyName = breakdownCurrency === 'BGN' ? t.leva : t.euro;
+  const otherCurrencyName = breakdownCurrency === 'BGN' ? t.euro : t.leva;
 
   return (
     <Animated.View style={{ opacity: fadeAnim }}>
-      <View style={styles.container}>
+      <View style={[styles.container, dynamicStyles.container]}>
         {/* Заглавие */}
-        <Text style={styles.headerLabel}>За връщане:</Text>
+        <Text style={[styles.headerLabel, dynamicStyles.headerLabel]}>
+          {t.headerLabel}
+        </Text>
 
         {/* Двете валути една до друга */}
         <View style={styles.currencyRow}>
           {/* Лева */}
-          <View style={styles.currencyBox}>
+          <View style={[styles.currencyBox, dynamicStyles.currencyBox]}>
             <Text style={styles.currencyFlag}>🇧🇬</Text>
-            <Text style={styles.currencyAmount}>{formatAmount(changeBgn)}</Text>
-            <Text style={styles.currencyLabel}>лева</Text>
+            <Text style={[styles.currencyAmount, dynamicStyles.currencyAmount]}>
+              {formatAmount(changeBgn)}
+            </Text>
+            <Text style={[styles.currencyLabel, dynamicStyles.currencyLabel]}>
+              {t.leva}
+            </Text>
           </View>
 
           {/* Разделител */}
           <View style={styles.divider}>
-            <Text style={styles.dividerText}>или</Text>
+            <Text style={[styles.dividerText, dynamicStyles.dividerText]}>
+              {t.or}
+            </Text>
           </View>
 
           {/* Евро */}
-          <View style={styles.currencyBox}>
+          <View style={[styles.currencyBox, dynamicStyles.currencyBox]}>
             <Text style={styles.currencyFlag}>🇪🇺</Text>
-            <Text style={styles.currencyAmount}>{formatAmount(changeEur)}</Text>
-            <Text style={styles.currencyLabel}>евро</Text>
+            <Text style={[styles.currencyAmount, dynamicStyles.currencyAmount]}>
+              {formatAmount(changeEur)}
+            </Text>
+            <Text style={[styles.currencyLabel, dynamicStyles.currencyLabel]}>
+              {t.euro}
+            </Text>
           </View>
         </View>
 
@@ -115,31 +204,59 @@ export function ChangeDisplay({
         {denominations.length > 0 && (
           <View style={styles.denominationsSection}>
             <View style={styles.denominationsHeader}>
-              <Text style={styles.denominationsTitle}>
-                Разбивка в {currencyName}:
+              <Text
+                style={[
+                  styles.denominationsTitle,
+                  dynamicStyles.denominationsTitle,
+                ]}
+              >
+                {t.breakdownIn} {currencyName}:
               </Text>
               <TouchableOpacity
-                style={styles.switchButton}
+                style={[styles.switchButton, dynamicStyles.switchButton]}
                 onPress={toggleBreakdownCurrency}
               >
-                <Text style={styles.switchButtonText}>
-                  Покажи в {otherCurrencyName} →
+                <Text
+                  style={[
+                    styles.switchButtonText,
+                    dynamicStyles.switchButtonText,
+                  ]}
+                >
+                  {t.showIn} {otherCurrencyName} →
                 </Text>
               </TouchableOpacity>
             </View>
             <View style={styles.denominationsList}>
               {denominations.map((item, index) => (
-                <View key={index} style={styles.denominationItem}>
+                <View
+                  key={index}
+                  style={[
+                    styles.denominationItem,
+                    dynamicStyles.denominationItem,
+                  ]}
+                >
                   <Text style={styles.denominationIcon}>
                     {isBanknote(item.denomination, breakdownCurrency)
                       ? '💵'
                       : '🪙'}
                   </Text>
-                  <Text style={styles.denominationCount}>{item.count}x</Text>
-                  <Text style={styles.denominationValue}>
+                  <Text
+                    style={[
+                      styles.denominationCount,
+                      dynamicStyles.denominationCount,
+                    ]}
+                  >
+                    {item.count}x
+                  </Text>
+                  <Text
+                    style={[
+                      styles.denominationValue,
+                      dynamicStyles.denominationValue,
+                    ]}
+                  >
                     {item.denomination < 1
                       ? `${Math.round(item.denomination * 100)} ${
-                          breakdownCurrency === 'BGN' ? 'ст' : 'цент'
+                          breakdownCurrency === 'BGN' ? t.stotinki : t.cents
                         }`
                       : `${formatAmount(item.denomination)} ${currencySymbol}`}
                   </Text>
@@ -152,9 +269,7 @@ export function ChangeDisplay({
         {/* Предупреждение за голямо ресто */}
         {changeBgn > 500 && (
           <View style={styles.warning}>
-            <Text style={styles.warningText}>
-              ⚠️ Проверете сумата - голямо ресто!
-            </Text>
+            <Text style={styles.warningText}>{t.warning}</Text>
           </View>
         )}
       </View>
@@ -164,7 +279,6 @@ export function ChangeDisplay({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#F0FDF4',
     borderRadius: 16,
     padding: 20,
     marginBottom: 20,
@@ -172,7 +286,6 @@ const styles = StyleSheet.create({
   headerLabel: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#065F46',
     textAlign: 'center',
     marginBottom: 16,
   },
@@ -186,10 +299,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     paddingHorizontal: 8,
-    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#D1FAE5',
   },
   currencyFlag: {
     fontSize: 24,
@@ -198,11 +309,9 @@ const styles = StyleSheet.create({
   currencyAmount: {
     fontSize: 32,
     fontWeight: '700',
-    color: '#065F46',
   },
   currencyLabel: {
     fontSize: 14,
-    color: '#059669',
     fontWeight: '500',
     marginTop: 2,
   },
@@ -211,7 +320,6 @@ const styles = StyleSheet.create({
   },
   dividerText: {
     fontSize: 14,
-    color: '#6B7280',
     fontWeight: '500',
   },
   noChangeText: {
@@ -233,12 +341,10 @@ const styles = StyleSheet.create({
   denominationsTitle: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#065F46',
     textAlign: 'center',
     marginBottom: 8,
   },
   switchButton: {
-    backgroundColor: '#D1FAE5',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 16,
@@ -246,7 +352,6 @@ const styles = StyleSheet.create({
   switchButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#059669',
   },
   denominationsList: {
     flexDirection: 'row',
@@ -257,12 +362,10 @@ const styles = StyleSheet.create({
   denominationItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderWidth: 1,
-    borderColor: '#D1FAE5',
   },
   denominationIcon: {
     fontSize: 14,
@@ -271,12 +374,10 @@ const styles = StyleSheet.create({
   denominationCount: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#065F46',
     marginRight: 4,
   },
   denominationValue: {
     fontSize: 14,
-    color: '#059669',
     fontWeight: '500',
   },
   warning: {

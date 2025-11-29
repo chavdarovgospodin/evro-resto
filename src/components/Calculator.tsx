@@ -7,7 +7,6 @@ import {
   Keyboard,
   StyleSheet,
   TextInput,
-  SafeAreaView,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import * as Haptics from 'expo-haptics';
@@ -20,19 +19,32 @@ import {
   convertEurToBgn,
 } from '../utils/calculator';
 import { formatAmount } from '../utils/formatter';
+import { useApp, CurrencyType } from '../context/AppContext';
 
-type CurrencyType = 'BGN' | 'EUR';
+interface CalculatorProps {
+  onOpenSettings?: () => void;
+}
 
-export function Calculator() {
+export function Calculator({ onOpenSettings }: CalculatorProps) {
+  const { settings, t } = useApp();
+  const { currency: defaultCurrency, theme, language } = settings;
+  const isDark = theme === 'dark';
+
   const [received, setReceived] = useState('');
   const [bill, setBill] = useState('');
-  const [primaryCurrency, setPrimaryCurrency] = useState<CurrencyType>('BGN');
+  const [primaryCurrency, setPrimaryCurrency] =
+    useState<CurrencyType>(defaultCurrency);
   const [error, setError] = useState<string>('');
   const [receivedFocused, setReceivedFocused] = useState(false);
   const [billFocused, setBillFocused] = useState(false);
 
   const billInputRef = useRef<TextInput>(null);
   const receivedInputRef = useRef<TextInput>(null);
+
+  // Синхронизиране на валутата с настройките
+  useEffect(() => {
+    setPrimaryCurrency(defaultCurrency);
+  }, [defaultCurrency]);
 
   const changeResult = calculateChange(
     parseCurrencyString(received),
@@ -41,11 +53,19 @@ export function Calculator() {
 
   useEffect(() => {
     if (!changeResult.isValid && changeResult.error) {
-      setError(changeResult.error);
+      // Превеждаме грешката
+      if (
+        changeResult.error.includes('Недостатъчна') ||
+        changeResult.error.includes('Insufficient')
+      ) {
+        setError(t('error.insufficient'));
+      } else {
+        setError(t('error.invalid'));
+      }
     } else {
       setError('');
     }
-  }, [changeResult]);
+  }, [changeResult, t]);
 
   const handleReceivedChange = (text: string) => {
     let filteredText = text.replace(/[^\d.,]/g, '');
@@ -96,7 +116,6 @@ export function Calculator() {
   };
 
   const handleCurrencySwap = () => {
-    // Haptic feedback
     try {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     } catch (e) {
@@ -139,23 +158,74 @@ export function Calculator() {
 
   const hasContent = received.trim() || bill.trim();
 
+  // Динамични стилове за тъмна тема
+  const dynamicStyles = {
+    safeArea: {
+      backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+    },
+    container: {
+      backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+    },
+    settingsButton: {
+      backgroundColor: isDark ? '#374151' : '#F3F4F6',
+    },
+    text: {
+      color: isDark ? '#F9FAFB' : '#1F2937',
+    },
+    secondaryText: {
+      color: isDark ? '#9CA3AF' : '#6B7280',
+    },
+    input: {
+      backgroundColor: isDark ? '#374151' : '#FFFFFF',
+      borderColor: isDark ? '#4B5563' : '#E5E7EB',
+      color: isDark ? '#F9FAFB' : '#1F2937',
+    },
+    exchangeRate: {
+      backgroundColor: isDark ? '#374151' : '#F3F4F6',
+    },
+    currencyButtonInactive: {
+      backgroundColor: isDark ? '#374151' : '#FFFFFF',
+      borderColor: isDark ? '#4B5563' : '#E5E7EB',
+    },
+    swapButton: {
+      backgroundColor: isDark ? '#3B3B6D' : '#EDE9FE',
+    },
+  };
+
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <StatusBar style="dark" />
+    <View style={[styles.container, dynamicStyles.container]}>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
+
+      {/* Settings бутон горе в дясно */}
+      {onOpenSettings && (
+        <TouchableOpacity
+          style={[styles.settingsButton, dynamicStyles.settingsButton]}
+          onPress={onOpenSettings}
+        >
+          <Text style={styles.settingsButtonText}>⚙️</Text>
+        </TouchableOpacity>
+      )}
+
       <ScrollView
-        style={styles.container}
+        style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
         {/* Заглавие */}
         <View style={styles.header}>
-          <Text style={styles.title}>Евро Ресто</Text>
-          <Text style={styles.subtitle}>
-            Калкулатор за ресто при преминаване към евро
+          <Text style={styles.title}>{t('app.title')}</Text>
+          <Text style={[styles.subtitle, dynamicStyles.secondaryText]}>
+            {t('app.subtitle')}
           </Text>
-          <View style={styles.exchangeRateContainer}>
-            <Text style={styles.exchangeRateText}>1 € = 1.95583 лв</Text>
+          <View
+            style={[styles.exchangeRateContainer, dynamicStyles.exchangeRate]}
+          >
+            <Text
+              style={[styles.exchangeRateText, dynamicStyles.secondaryText]}
+            >
+              {t('calc.exchangeRate')}
+            </Text>
           </View>
         </View>
 
@@ -166,7 +236,7 @@ export function Calculator() {
               styles.currencyButton,
               primaryCurrency === 'BGN'
                 ? styles.currencyButtonActive
-                : styles.currencyButtonInactive,
+                : dynamicStyles.currencyButtonInactive,
             ]}
             onPress={() => setPrimaryCurrency('BGN')}
           >
@@ -175,15 +245,15 @@ export function Calculator() {
                 styles.currencyButtonText,
                 primaryCurrency === 'BGN'
                   ? styles.currencyButtonTextActive
-                  : styles.currencyButtonTextInactive,
+                  : dynamicStyles.text,
               ]}
             >
-              🇧🇬 Лева
+              🇧🇬 {t('currency.bgn')}
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.swapButton}
+            style={[styles.swapButton, dynamicStyles.swapButton]}
             onPress={handleCurrencySwap}
           >
             <Text style={styles.swapButtonText}>⇄</Text>
@@ -194,7 +264,7 @@ export function Calculator() {
               styles.currencyButton,
               primaryCurrency === 'EUR'
                 ? styles.currencyButtonActive
-                : styles.currencyButtonInactive,
+                : dynamicStyles.currencyButtonInactive,
             ]}
             onPress={() => setPrimaryCurrency('EUR')}
           >
@@ -203,10 +273,10 @@ export function Calculator() {
                 styles.currencyButtonText,
                 primaryCurrency === 'EUR'
                   ? styles.currencyButtonTextActive
-                  : styles.currencyButtonTextInactive,
+                  : dynamicStyles.text,
               ]}
             >
-              🇪🇺 Евро
+              🇪🇺 {t('currency.eur')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -215,11 +285,17 @@ export function Calculator() {
         <View style={styles.inputsContainer}>
           {/* Поле Получих */}
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Получих</Text>
+            <Text style={[styles.inputLabel, dynamicStyles.text]}>
+              {t('calc.received')}
+            </Text>
             <View style={styles.inputWrapper}>
               <TextInput
                 ref={receivedInputRef}
-                style={[styles.input, receivedFocused && styles.inputFocused]}
+                style={[
+                  styles.input,
+                  dynamicStyles.input,
+                  receivedFocused && styles.inputFocused,
+                ]}
                 value={received}
                 onChangeText={handleReceivedChange}
                 onFocus={() => setReceivedFocused(true)}
@@ -228,24 +304,36 @@ export function Calculator() {
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
               />
-              <Text style={styles.currencySymbol}>
-                {primaryCurrency === 'BGN' ? 'лв' : '€'}
+              <Text
+                style={[styles.currencySymbol, dynamicStyles.secondaryText]}
+              >
+                {primaryCurrency === 'BGN'
+                  ? t('currency.lv')
+                  : t('currency.euro')}
               </Text>
             </View>
             <QuickAmounts
               amounts={[5, 10, 20, 50, 100]}
               onSelect={handleReceivedQuickAmount}
               currency={primaryCurrency}
+              isDark={isDark}
+              language={language}
             />
           </View>
 
           {/* Поле Сметка */}
           <View style={styles.inputGroup}>
-            <Text style={styles.inputLabel}>Сметка</Text>
+            <Text style={[styles.inputLabel, dynamicStyles.text]}>
+              {t('calc.bill')}
+            </Text>
             <View style={styles.inputWrapper}>
               <TextInput
                 ref={billInputRef}
-                style={[styles.input, billFocused && styles.inputFocused]}
+                style={[
+                  styles.input,
+                  dynamicStyles.input,
+                  billFocused && styles.inputFocused,
+                ]}
                 value={bill}
                 onChangeText={handleBillChange}
                 onFocus={() => setBillFocused(true)}
@@ -254,14 +342,20 @@ export function Calculator() {
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
               />
-              <Text style={styles.currencySymbol}>
-                {primaryCurrency === 'BGN' ? 'лв' : '€'}
+              <Text
+                style={[styles.currencySymbol, dynamicStyles.secondaryText]}
+              >
+                {primaryCurrency === 'BGN'
+                  ? t('currency.lv')
+                  : t('currency.euro')}
               </Text>
             </View>
             <QuickAmounts
               amounts={[5, 10, 20, 50, 100]}
               onSelect={handleBillQuickAmount}
               currency={primaryCurrency}
+              isDark={isDark}
+              language={language}
             />
           </View>
 
@@ -282,12 +376,17 @@ export function Calculator() {
                 changeBgn={changeResult.bgn}
                 changeEur={changeResult.eur}
                 primaryCurrency={primaryCurrency}
+                isDark={isDark}
+                language={language}
               />
             ) : (
-              <View style={styles.noChangeContainer}>
-                <Text style={styles.noChangeText}>
-                  ✅ Точна сума - няма ресто
-                </Text>
+              <View
+                style={[
+                  styles.noChangeContainer,
+                  isDark && styles.noChangeContainerDark,
+                ]}
+              >
+                <Text style={styles.noChangeText}>{t('change.noChange')}</Text>
               </View>
             ))}
 
@@ -297,6 +396,8 @@ export function Calculator() {
               styles.clearButton,
               hasContent
                 ? styles.clearButtonEnabled
+                : isDark
+                ? styles.clearButtonDisabledDark
                 : styles.clearButtonDisabled,
             ]}
             onPress={handleClear}
@@ -310,23 +411,35 @@ export function Calculator() {
                   : styles.clearButtonTextDisabled,
               ]}
             >
-              Изчисти
+              {t('calc.clear')}
             </Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+  },
+  scrollView: {
+    flex: 1,
+  },
+  settingsButton: {
+    position: 'absolute',
+    top: 50,
+    right: 20,
+    zIndex: 100,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  settingsButtonText: {
+    fontSize: 22,
   },
   scrollContent: {
     flexGrow: 1,
@@ -346,19 +459,16 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 16,
-    color: '#6B7280',
     textAlign: 'center',
   },
   exchangeRateContainer: {
     marginTop: 12,
-    backgroundColor: '#F3F4F6',
     paddingHorizontal: 14,
     paddingVertical: 8,
     borderRadius: 20,
   },
   exchangeRateText: {
     fontSize: 13,
-    color: '#6B7280',
     fontWeight: '500',
   },
   currencySelector: {
@@ -380,10 +490,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#7C3AED',
     borderColor: '#7C3AED',
   },
-  currencyButtonInactive: {
-    backgroundColor: '#FFFFFF',
-    borderColor: '#E5E7EB',
-  },
   currencyButtonText: {
     fontSize: 16,
     fontWeight: '600',
@@ -391,14 +497,10 @@ const styles = StyleSheet.create({
   currencyButtonTextActive: {
     color: '#FFFFFF',
   },
-  currencyButtonTextInactive: {
-    color: '#1F2937',
-  },
   swapButton: {
     width: 48,
     height: 48,
     borderRadius: 24,
-    backgroundColor: '#EDE9FE',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -416,7 +518,6 @@ const styles = StyleSheet.create({
   inputLabel: {
     fontSize: 17,
     fontWeight: '600',
-    color: '#1F2937',
     marginBottom: 10,
   },
   inputWrapper: {
@@ -424,14 +525,11 @@ const styles = StyleSheet.create({
   },
   input: {
     borderWidth: 1,
-    borderColor: '#E5E7EB',
     borderRadius: 14,
     paddingHorizontal: 18,
     paddingVertical: 18,
     paddingRight: 55,
     fontSize: 22,
-    backgroundColor: '#FFFFFF',
-    color: '#1F2937',
   },
   inputFocused: {
     borderColor: '#7C3AED',
@@ -443,7 +541,6 @@ const styles = StyleSheet.create({
     top: '50%',
     transform: [{ translateY: -12 }],
     fontSize: 18,
-    color: '#6B7280',
     fontWeight: '500',
   },
   errorContainer: {
@@ -472,6 +569,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
+  noChangeContainerDark: {
+    backgroundColor: '#065F46',
+  },
   noChangeText: {
     fontSize: 17,
     color: '#10B981',
@@ -489,6 +589,9 @@ const styles = StyleSheet.create({
   },
   clearButtonDisabled: {
     backgroundColor: '#F3F4F6',
+  },
+  clearButtonDisabledDark: {
+    backgroundColor: '#374151',
   },
   clearButtonText: {
     fontSize: 18,

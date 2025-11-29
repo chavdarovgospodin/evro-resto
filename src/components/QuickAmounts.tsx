@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import * as Haptics from 'expo-haptics';
+import type { LanguageType } from '../context/AppContext';
 
 const triggerHapticFeedback = () => {
   try {
@@ -10,18 +11,37 @@ const triggerHapticFeedback = () => {
   }
 };
 
+// Преводи
+const translations = {
+  bg: {
+    title: 'Чести суми',
+    lv: 'лв',
+    euro: '€',
+  },
+  en: {
+    title: 'Quick amounts',
+    lv: 'lv',
+    euro: '€',
+  },
+};
+
 interface QuickAmountsProps {
   amounts: number[];
   onSelect: (amount: number) => void;
   currency: 'BGN' | 'EUR';
+  isDark?: boolean;
+  language?: LanguageType;
 }
 
 export function QuickAmounts({
   amounts,
   onSelect,
   currency,
+  isDark = false,
+  language = 'bg',
 }: QuickAmountsProps) {
   const [pressedIndex, setPressedIndex] = useState<number | null>(null);
+  const t = translations[language];
 
   const handlePress = (amount: number, index: number) => {
     setPressedIndex(index);
@@ -34,9 +54,25 @@ export function QuickAmounts({
     onSelect(amount);
   };
 
+  const dynamicStyles = {
+    title: {
+      color: isDark ? '#9CA3AF' : '#9CA3AF',
+    },
+    buttonNormal: {
+      backgroundColor: isDark ? '#374151' : '#F9FAFB',
+      borderColor: isDark ? '#4B5563' : '#E5E7EB',
+    },
+    textNormal: {
+      color: isDark ? '#F9FAFB' : '#374151',
+    },
+    currencyNormal: {
+      color: isDark ? '#9CA3AF' : '#9CA3AF',
+    },
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Чести суми</Text>
+      <Text style={[styles.title, dynamicStyles.title]}>{t.title}</Text>
       <View style={styles.buttonContainer}>
         {amounts.map((amount, index) => (
           <TouchableOpacity
@@ -45,7 +81,7 @@ export function QuickAmounts({
               styles.amountButton,
               pressedIndex === index
                 ? styles.amountButtonPressed
-                : styles.amountButtonNormal,
+                : dynamicStyles.buttonNormal,
             ]}
             onPress={() => handlePress(amount, index)}
           >
@@ -54,7 +90,7 @@ export function QuickAmounts({
                 styles.amountText,
                 pressedIndex === index
                   ? styles.amountTextPressed
-                  : styles.amountTextNormal,
+                  : dynamicStyles.textNormal,
               ]}
             >
               {amount}
@@ -64,10 +100,10 @@ export function QuickAmounts({
                 styles.currencyText,
                 pressedIndex === index
                   ? styles.currencyTextPressed
-                  : styles.currencyTextNormal,
+                  : dynamicStyles.currencyNormal,
               ]}
             >
-              {currency === 'BGN' ? 'лв' : '€'}
+              {currency === 'BGN' ? t.lv : t.euro}
             </Text>
           </TouchableOpacity>
         ))}
@@ -83,7 +119,6 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#9CA3AF',
     textAlign: 'center',
     marginBottom: 12,
   },
@@ -99,10 +134,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
   },
-  amountButtonNormal: {
-    backgroundColor: '#F9FAFB',
-    borderColor: '#E5E7EB',
-  },
   amountButtonPressed: {
     backgroundColor: '#7C3AED',
     borderColor: '#7C3AED',
@@ -112,18 +143,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
   },
-  amountTextNormal: {
-    color: '#374151',
-  },
   amountTextPressed: {
     color: '#FFFFFF',
   },
   currencyText: {
     fontSize: 12,
     marginTop: 2,
-  },
-  currencyTextNormal: {
-    color: '#9CA3AF',
   },
   currencyTextPressed: {
     color: '#FFFFFF',
