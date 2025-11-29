@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router';
 import { StyleSheet } from 'react-native';
 
-export default function TabLayout() {
+function TabLayout() {
   return (
     <Tabs
       screenOptions={{
@@ -18,4 +18,6 @@ export default function TabLayout() {
     </Tabs>
   );
 }
+
+export default TabLayout;
 
