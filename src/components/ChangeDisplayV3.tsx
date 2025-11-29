@@ -148,12 +148,7 @@ export function ChangeDisplayV3({
                   ]}
                 >
                   {isBanknote(item.denomination, breakdownCurrency) ? (
-                    <Ionicons
-                      name="cash-outline"
-                      size={16}
-                      color={colors.accent}
-                      style={styles.denomIcon}
-                    />
+                    <Text style={styles.denomIcon}>💶</Text>
                   ) : (
                     <Text style={styles.denomIcon}>🪙</Text>
                   )}
