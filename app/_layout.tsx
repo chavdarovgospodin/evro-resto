@@ -6,8 +6,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AppProvider, useApp } from '../src/context/AppContext';
 
 function RootLayoutNav() {
-  const { isLoading, settings } = useApp();
-  const isDark = settings.theme === 'dark';
+  const { isLoading, isDark } = useApp();
   const bgColor = isDark ? '#1F2937' : '#FFFFFF';
 
   if (isLoading) {
@@ -28,8 +27,8 @@ function RootLayoutNav() {
           },
         }}
       >
-        <Stack.Screen 
-          name="(tabs)" 
+        <Stack.Screen
+          name="(tabs)"
           options={{
             contentStyle: {
               backgroundColor: bgColor,
@@ -39,10 +38,10 @@ function RootLayoutNav() {
         <Stack.Screen
           name="settings"
           options={{
-            presentation: 'card',
-            animation: 'slide_from_right',
+            presentation: 'fullScreenModal',
+            animation: 'fade',
             gestureEnabled: true,
-            gestureDirection: 'horizontal',
+            gestureDirection: 'vertical',
             contentStyle: {
               backgroundColor: bgColor,
             },

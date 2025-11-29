@@ -1,4 +1,9 @@
 /**
+ * Maximum allowed amount to prevent overflow
+ */
+export const MAX_AMOUNT = 99999.99;
+
+/**
  * Sanitizes currency input text
  * - Allows only digits, dots and commas
  * - Converts commas to dots
@@ -22,5 +27,12 @@ export const sanitizeCurrencyInput = (text: string): string => {
   }
 
   return filteredText;
+};
+
+/**
+ * Validates if amount is within allowed range
+ */
+export const isAmountValid = (amount: number): boolean => {
+  return amount >= 0 && amount <= MAX_AMOUNT;
 };
 

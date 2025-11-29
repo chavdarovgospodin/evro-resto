@@ -1,6 +1,6 @@
 export type CurrencyType = 'BGN' | 'EUR';
 export type LanguageType = 'bg' | 'en';
-export type ThemeType = 'light' | 'dark';
+export type ThemeType = 'light' | 'dark' | 'system';
 
 export interface AppSettings {
   currency: CurrencyType;
@@ -10,6 +10,7 @@ export interface AppSettings {
 
 export interface AppContextType {
   settings: AppSettings;
+  isDark: boolean;
   setCurrency: (currency: CurrencyType) => void;
   setLanguage: (language: LanguageType) => void;
   setTheme: (theme: ThemeType) => void;

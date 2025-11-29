@@ -148,10 +148,10 @@ export const getQuickAmountsDynamicStyles = (isDark: boolean) => ({
     borderColor: isDark ? colors.dark.border : colors.light.border,
   },
   textNormal: {
-    color: isDark ? colors.dark.text : colors.light.backgroundSecondary,
+    color: isDark ? colors.dark.text : colors.light.text,
   },
   currencyNormal: {
-    color: colors.light.textMuted,
+    color: isDark ? colors.dark.textMuted : colors.light.textSecondary,
   },
 });
 

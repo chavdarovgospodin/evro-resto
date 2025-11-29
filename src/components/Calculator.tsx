@@ -19,7 +19,11 @@ import {
   convertEurToBgn,
 } from '../utils/calculator';
 import { formatAmount } from '../utils/formatter';
-import { sanitizeCurrencyInput } from '../utils/input';
+import {
+  sanitizeCurrencyInput,
+  MAX_AMOUNT,
+  isAmountValid,
+} from '../utils/input';
 import { triggerHapticLight, triggerHapticMedium } from '../utils/haptics';
 import { getTopPadding } from '../utils/platform';
 import { useApp } from '../context/AppContext';
@@ -29,9 +33,8 @@ import type { CalculatorProps } from '../types/calculator.types';
 import type { CurrencyType } from '../types';
 
 export function Calculator({ onOpenSettings }: CalculatorProps) {
-  const { settings, t } = useApp();
-  const { currency: defaultCurrency, theme, language } = settings;
-  const isDark = theme === 'dark';
+  const { settings, isDark, t } = useApp();
+  const { currency: defaultCurrency, language } = settings;
   const insets = useSafeAreaInsets();
   const topPadding = getTopPadding(insets);
   const dynamicStyles = getCalculatorDynamicStyles(isDark);
@@ -79,9 +82,14 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
 
   const handleReceivedChange = (text: string) => {
     const filteredText = sanitizeCurrencyInput(text);
-    setReceived(filteredText);
-
     const amount = parseCurrencyString(filteredText);
+
+    if (!isAmountValid(amount)) {
+      setError(t('error.tooLarge'));
+      return;
+    }
+
+    setReceived(filteredText);
     if (primaryCurrency === 'BGN') {
       setReceivedBgn(amount);
     } else {
@@ -91,9 +99,14 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
 
   const handleBillChange = (text: string) => {
     const filteredText = sanitizeCurrencyInput(text);
-    setBill(filteredText);
-
     const amount = parseCurrencyString(filteredText);
+
+    if (!isAmountValid(amount)) {
+      setError(t('error.tooLarge'));
+      return;
+    }
+
+    setBill(filteredText);
     if (primaryCurrency === 'BGN') {
       setBillBgn(amount);
     } else {

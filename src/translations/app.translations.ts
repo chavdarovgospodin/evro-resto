@@ -35,6 +35,7 @@ export const translations: Record<LanguageType, Record<string, string>> = {
     // Грешки
     'error.insufficient': 'Недостатъчна сума',
     'error.invalid': 'Невалидна сметка',
+    'error.tooLarge': 'Сумата е твърде голяма',
 
     // Настройки
     'settings.title': 'Настройки',
@@ -48,6 +49,7 @@ export const translations: Record<LanguageType, Record<string, string>> = {
     'settings.english': 'English',
     'settings.light': 'Светла',
     'settings.dark': 'Тъмна',
+    'settings.system': 'Системна',
   },
   en: {
     // Titles
@@ -83,6 +85,7 @@ export const translations: Record<LanguageType, Record<string, string>> = {
     // Errors
     'error.insufficient': 'Insufficient amount',
     'error.invalid': 'Invalid bill',
+    'error.tooLarge': 'Amount is too large',
 
     // Settings
     'settings.title': 'Settings',
@@ -96,6 +99,7 @@ export const translations: Record<LanguageType, Record<string, string>> = {
     'settings.english': 'English',
     'settings.light': 'Light',
     'settings.dark': 'Dark',
+    'settings.system': 'System',
   },
 };
 

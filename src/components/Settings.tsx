@@ -11,11 +11,10 @@ import { getSettingsDynamicStyles } from '../styles/theme.styles';
 import type { CurrencyType, LanguageType, ThemeType } from '../types';
 
 export function Settings() {
-  const { settings, setCurrency, setLanguage, setTheme, t } = useApp();
+  const { settings, isDark, setCurrency, setLanguage, setTheme, t } = useApp();
   const { currency, language, theme } = settings;
   const insets = useSafeAreaInsets();
   const topPadding = getTopPadding(insets);
-  const isDark = theme === 'dark';
   const dynamicStyles = getSettingsDynamicStyles(isDark);
 
   const handleCurrencyChange = (value: CurrencyType) => {
@@ -154,10 +153,10 @@ export function Settings() {
           <Text style={[styles.settingLabel, dynamicStyles.text]}>
             {t('settings.theme')}
           </Text>
-          <View style={styles.optionsRow}>
+          <View style={styles.optionsRowThree}>
             <TouchableOpacity
               style={[
-                styles.option,
+                styles.optionSmall,
                 theme === 'light'
                   ? styles.optionActive
                   : dynamicStyles.optionInactive,
@@ -166,7 +165,7 @@ export function Settings() {
             >
               <Ionicons
                 name="sunny-outline"
-                size={20}
+                size={18}
                 color={
                   theme === 'light'
                     ? '#FFFFFF'
@@ -177,7 +176,7 @@ export function Settings() {
               />
               <Text
                 style={[
-                  styles.optionText,
+                  styles.optionTextSmall,
                   theme === 'light'
                     ? styles.optionTextActive
                     : dynamicStyles.text,
@@ -188,7 +187,7 @@ export function Settings() {
             </TouchableOpacity>
             <TouchableOpacity
               style={[
-                styles.option,
+                styles.optionSmall,
                 theme === 'dark'
                   ? styles.optionActive
                   : dynamicStyles.optionInactive,
@@ -197,20 +196,51 @@ export function Settings() {
             >
               <Ionicons
                 name="moon-outline"
-                size={20}
+                size={18}
                 color={
                   theme === 'dark' ? '#FFFFFF' : isDark ? '#F9FAFB' : '#1F2937'
                 }
               />
               <Text
                 style={[
-                  styles.optionText,
+                  styles.optionTextSmall,
                   theme === 'dark'
                     ? styles.optionTextActive
                     : dynamicStyles.text,
                 ]}
               >
                 {t('settings.dark')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionSmall,
+                theme === 'system'
+                  ? styles.optionActive
+                  : dynamicStyles.optionInactive,
+              ]}
+              onPress={() => handleThemeChange('system')}
+            >
+              <Ionicons
+                name="phone-portrait-outline"
+                size={18}
+                color={
+                  theme === 'system'
+                    ? '#FFFFFF'
+                    : isDark
+                      ? '#F9FAFB'
+                      : '#1F2937'
+                }
+              />
+              <Text
+                style={[
+                  styles.optionTextSmall,
+                  theme === 'system'
+                    ? styles.optionTextActive
+                    : dynamicStyles.text,
+                ]}
+              >
+                {t('settings.system')}
               </Text>
             </TouchableOpacity>
           </View>

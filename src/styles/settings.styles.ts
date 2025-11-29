@@ -33,6 +33,10 @@ export const settingsStyles = StyleSheet.create({
     flexDirection: 'row',
     gap: 12,
   },
+  optionsRowThree: {
+    flexDirection: 'row',
+    gap: 8,
+  },
   option: {
     flex: 1,
     flexDirection: 'row',
@@ -44,6 +48,17 @@ export const settingsStyles = StyleSheet.create({
     borderWidth: 2,
     gap: 8,
   },
+  optionSmall: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderRadius: 12,
+    borderWidth: 2,
+    gap: 4,
+  },
   optionActive: {
     backgroundColor: '#7C3AED',
     borderColor: '#7C3AED',
@@ -53,6 +68,10 @@ export const settingsStyles = StyleSheet.create({
   },
   optionText: {
     fontSize: 15,
+    fontWeight: '600',
+  },
+  optionTextSmall: {
+    fontSize: 13,
     fontWeight: '600',
   },
   optionTextActive: {

@@ -5,6 +5,7 @@ import React, {
   useEffect,
   ReactNode,
 } from 'react';
+import { Appearance } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import type {
   CurrencyType,
@@ -24,14 +25,26 @@ const STORAGE_KEYS = {
 const defaultSettings: AppSettings = {
   currency: 'BGN',
   language: 'bg',
-  theme: 'light',
+  theme: 'system',
 };
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: { children: ReactNode }) {
+  const [systemColorScheme, setSystemColorScheme] = useState(
+    Appearance.getColorScheme()
+  );
   const [settings, setSettings] = useState<AppSettings>(defaultSettings);
   const [isLoading, setIsLoading] = useState(true);
+
+  // Listen for system theme changes
+  useEffect(() => {
+    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
+      setSystemColorScheme(colorScheme);
+    });
+
+    return () => subscription.remove();
+  }, []);
 
   useEffect(() => {
     loadSettings();
@@ -45,10 +58,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
         AsyncStorage.getItem(STORAGE_KEYS.THEME),
       ]);
 
+      // Ако темата е 'light' или 'dark' от стари настройки, запазваме я
+      // Ако е null/undefined, използваме 'system' по подразбиране
+      const themeValue = theme as ThemeType;
+      const validTheme =
+        themeValue === 'light' ||
+        themeValue === 'dark' ||
+        themeValue === 'system'
+          ? themeValue
+          : defaultSettings.theme;
+
       setSettings({
         currency: (currency as CurrencyType) || defaultSettings.currency,
         language: (language as LanguageType) || defaultSettings.language,
-        theme: (theme as ThemeType) || defaultSettings.theme,
+        theme: validTheme,
       });
     } catch (error) {
       console.error('Error loading settings:', error);
@@ -88,10 +111,18 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return translations[settings.language][key] || key;
   };
 
+  // Изчисляване на isDark базирано на темата
+  // systemColorScheme може да е null, затова използваме 'light' като fallback
+  const isDark =
+    settings.theme === 'system'
+      ? (systemColorScheme ?? 'light') === 'dark'
+      : settings.theme === 'dark';
+
   return (
     <AppContext.Provider
       value={{
         settings,
+        isDark,
         setCurrency,
         setLanguage,
         setTheme,
