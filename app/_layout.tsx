@@ -2,6 +2,7 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { AppProvider, useApp } from '../src/context/AppContext';
 
 function RootLayoutNav() {
@@ -55,11 +56,13 @@ function RootLayoutNav() {
 
 export default function RootLayout() {
   return (
-    <AppProvider>
-      <SafeAreaProvider>
-        <RootLayoutNav />
-      </SafeAreaProvider>
-    </AppProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AppProvider>
+        <SafeAreaProvider>
+          <RootLayoutNav />
+        </SafeAreaProvider>
+      </AppProvider>
+    </GestureHandlerRootView>
   );
 }
 

@@ -84,6 +84,7 @@ export function QuickAmounts({
                 : dynamicStyles.buttonNormal,
             ]}
             onPress={() => handlePress(amount, index)}
+            activeOpacity={0.7}
           >
             <Text
               style={[
