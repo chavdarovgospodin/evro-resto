@@ -1,66 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Animated,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
-import * as Haptics from 'expo-haptics';
+import { View, Animated, Text, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { formatAmount } from '../utils/formatter';
 import { getDenominationBreakdown } from '../utils/calculator';
-import type { CurrencyType } from '../constants/currency';
-import type { LanguageType } from '../context/AppContext';
-
-// Преводи
-const translations = {
-  bg: {
-    headerLabel: 'За връщане:',
-    or: 'или',
-    leva: 'лева',
-    euro: 'евро',
-    breakdownIn: 'Разбивка в',
-    showIn: 'Покажи в',
-    noChange: 'Точна сума - няма ресто',
-    warning: 'Проверете сумата - голямо ресто!',
-    stotinki: 'ст',
-    cents: 'цент',
-    lv: 'лв',
-    euroSymbol: '€',
-  },
-  en: {
-    headerLabel: 'Change:',
-    or: 'or',
-    leva: 'leva',
-    euro: 'euro',
-    breakdownIn: 'Breakdown in',
-    showIn: 'Show in',
-    noChange: 'Exact amount - no change',
-    warning: 'Check the amount - large change!',
-    stotinki: 'st',
-    cents: 'cent',
-    lv: 'lv',
-    euroSymbol: '€',
-  },
-};
-
-interface ChangeDisplayProps {
-  changeBgn: number;
-  changeEur: number;
-  primaryCurrency: CurrencyType;
-  isDark?: boolean;
-  language?: LanguageType;
-}
-
-// Функция за определяне дали е банкнота или монета
-const isBanknote = (value: number, currency: CurrencyType): boolean => {
-  if (currency === 'BGN') {
-    return value >= 5;
-  } else {
-    return value >= 5;
-  }
-};
+import { isBanknote } from '../utils/currency';
+import { triggerHapticLight } from '../utils/haptics';
+import { changeDisplayStyles as styles } from '../styles/changeDisplay.styles';
+import { getChangeDisplayDynamicStyles } from '../styles/theme.styles';
+import { changeDisplayTranslations } from '../translations/changeDisplay.translations';
+import type { ChangeDisplayProps } from '../types/changeDisplay.types';
+import type { CurrencyType } from '../types';
 
 export function ChangeDisplay({
   changeBgn,
@@ -72,7 +21,8 @@ export function ChangeDisplay({
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
   const [breakdownCurrency, setBreakdownCurrency] =
     useState<CurrencyType>('BGN');
-  const t = translations[language];
+  const t = changeDisplayTranslations[language];
+  const dynamicStyles = getChangeDisplayDynamicStyles(isDark);
 
   useEffect(() => {
     if (changeBgn > 0 || changeEur > 0) {
@@ -91,54 +41,8 @@ export function ChangeDisplay({
   }, [changeBgn, changeEur, fadeAnim]);
 
   const toggleBreakdownCurrency = () => {
-    try {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } catch (e) {
-      // Haptics not available
-    }
+    triggerHapticLight();
     setBreakdownCurrency((prev) => (prev === 'BGN' ? 'EUR' : 'BGN'));
-  };
-
-  // Динамични стилове за тъмна тема
-  const dynamicStyles = {
-    container: {
-      backgroundColor: isDark ? '#065F46' : '#F0FDF4',
-    },
-    headerLabel: {
-      color: isDark ? '#A7F3D0' : '#065F46',
-    },
-    currencyBox: {
-      backgroundColor: isDark ? '#064E3B' : '#FFFFFF',
-      borderColor: isDark ? '#10B981' : '#D1FAE5',
-    },
-    currencyAmount: {
-      color: isDark ? '#A7F3D0' : '#065F46',
-    },
-    currencyLabel: {
-      color: isDark ? '#6EE7B7' : '#059669',
-    },
-    dividerText: {
-      color: isDark ? '#9CA3AF' : '#6B7280',
-    },
-    denominationsTitle: {
-      color: isDark ? '#A7F3D0' : '#065F46',
-    },
-    switchButton: {
-      backgroundColor: isDark ? '#10B981' : '#D1FAE5',
-    },
-    switchButtonText: {
-      color: isDark ? '#FFFFFF' : '#059669',
-    },
-    denominationItem: {
-      backgroundColor: isDark ? '#064E3B' : '#FFFFFF',
-      borderColor: isDark ? '#10B981' : '#D1FAE5',
-    },
-    denominationCount: {
-      color: isDark ? '#A7F3D0' : '#065F46',
-    },
-    denominationValue: {
-      color: isDark ? '#6EE7B7' : '#059669',
-    },
   };
 
   if (changeBgn === 0 && changeEur === 0) {
@@ -159,7 +63,6 @@ export function ChangeDisplay({
     );
   }
 
-  // Изчисляваме разбивката според избраната валута
   const currentAmount = breakdownCurrency === 'BGN' ? changeBgn : changeEur;
   const denominations = getDenominationBreakdown(
     currentAmount,
@@ -172,14 +75,11 @@ export function ChangeDisplay({
   return (
     <Animated.View style={{ opacity: fadeAnim }}>
       <View style={[styles.container, dynamicStyles.container]}>
-        {/* Заглавие */}
         <Text style={[styles.headerLabel, dynamicStyles.headerLabel]}>
           {t.headerLabel}
         </Text>
 
-        {/* Двете валути една до друга */}
         <View style={styles.currencyRow}>
-          {/* Лева */}
           <View style={[styles.currencyBox, dynamicStyles.currencyBox]}>
             <Text style={styles.currencyFlag}>🇧🇬</Text>
             <Text style={[styles.currencyAmount, dynamicStyles.currencyAmount]}>
@@ -190,14 +90,12 @@ export function ChangeDisplay({
             </Text>
           </View>
 
-          {/* Разделител */}
           <View style={styles.divider}>
             <Text style={[styles.dividerText, dynamicStyles.dividerText]}>
               {t.or}
             </Text>
           </View>
 
-          {/* Евро */}
           <View style={[styles.currencyBox, dynamicStyles.currencyBox]}>
             <Text style={styles.currencyFlag}>🇪🇺</Text>
             <Text style={[styles.currencyAmount, dynamicStyles.currencyAmount]}>
@@ -209,7 +107,6 @@ export function ChangeDisplay({
           </View>
         </View>
 
-        {/* Разбивка по деноминации с превключвател */}
         {denominations.length > 0 && (
           <View style={styles.denominationsSection}>
             <View style={styles.denominationsHeader}>
@@ -280,7 +177,6 @@ export function ChangeDisplay({
           </View>
         )}
 
-        {/* Предупреждение за голямо ресто */}
         {changeBgn > 500 && (
           <View style={styles.warning}>
             <Ionicons
@@ -296,129 +192,3 @@ export function ChangeDisplay({
     </Animated.View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 20,
-  },
-  headerLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  currencyRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  currencyBox: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 8,
-    borderRadius: 12,
-    borderWidth: 2,
-  },
-  currencyFlag: {
-    fontSize: 24,
-    marginBottom: 4,
-  },
-  currencyAmount: {
-    fontSize: 32,
-    fontWeight: '700',
-  },
-  currencyLabel: {
-    fontSize: 14,
-    fontWeight: '500',
-    marginTop: 2,
-  },
-  divider: {
-    paddingHorizontal: 12,
-  },
-  dividerText: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  noChangeRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  noChangeText: {
-    fontSize: 17,
-    fontWeight: '500',
-    color: '#10B981',
-    textAlign: 'center',
-  },
-  denominationsSection: {
-    borderTopWidth: 1,
-    borderTopColor: '#D1FAE5',
-    paddingTop: 14,
-    marginTop: 16,
-  },
-  denominationsHeader: {
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  denominationsTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  switchButton: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-  },
-  switchButtonText: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  denominationsList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'center',
-    gap: 8,
-  },
-  denominationItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderWidth: 1,
-  },
-  denominationIcon: {
-    fontSize: 14,
-    marginRight: 4,
-  },
-  denominationCount: {
-    fontSize: 14,
-    fontWeight: '700',
-    marginRight: 4,
-  },
-  denominationValue: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  warning: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FEF2F2',
-    borderColor: '#EF4444',
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 10,
-    marginTop: 14,
-  },
-  warningText: {
-    fontSize: 14,
-    color: '#EF4444',
-    textAlign: 'center',
-  },
-});

@@ -1,72 +1,36 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-  Platform,
-  StatusBar as RNStatusBar,
-} from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
-import { useApp, CurrencyType, LanguageType, ThemeType } from '../context/AppContext';
+import { useApp } from '../context/AppContext';
+import { triggerHapticLight } from '../utils/haptics';
+import { getTopPadding } from '../utils/platform';
+import { settingsStyles as styles } from '../styles/settings.styles';
+import { getSettingsDynamicStyles } from '../styles/theme.styles';
+import type { CurrencyType, LanguageType, ThemeType } from '../types';
 
 export function Settings() {
   const { settings, setCurrency, setLanguage, setTheme, t } = useApp();
   const { currency, language, theme } = settings;
   const insets = useSafeAreaInsets();
-  
-  // На iOS използваме safe area insets, на Android използваме StatusBar height
-  const topPadding = Platform.OS === 'ios' 
-    ? Math.max(insets.top, 20) + 10  // iOS: safe area + малко допълнително
-    : (RNStatusBar.currentHeight || 24) + 10;  // Android: status bar height + малко допълнително
-
-  const triggerHaptic = () => {
-    try {
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
-    } catch (e) {
-      // Haptics not available
-    }
-  };
+  const topPadding = getTopPadding(insets);
+  const isDark = theme === 'dark';
+  const dynamicStyles = getSettingsDynamicStyles(isDark);
 
   const handleCurrencyChange = (value: CurrencyType) => {
-    triggerHaptic();
+    triggerHapticLight();
     setCurrency(value);
   };
 
   const handleLanguageChange = (value: LanguageType) => {
-    triggerHaptic();
+    triggerHapticLight();
     setLanguage(value);
   };
 
   const handleThemeChange = (value: ThemeType) => {
-    triggerHaptic();
+    triggerHapticLight();
     setTheme(value);
-  };
-
-  const isDark = theme === 'dark';
-
-  const dynamicStyles = {
-    container: {
-      backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-    },
-    text: {
-      color: isDark ? '#F9FAFB' : '#1F2937',
-    },
-    secondaryText: {
-      color: isDark ? '#9CA3AF' : '#6B7280',
-    },
-    card: {
-      backgroundColor: isDark ? '#374151' : '#F9FAFB',
-      borderColor: isDark ? '#4B5563' : '#E5E7EB',
-    },
-    optionInactive: {
-      backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
-      borderColor: isDark ? '#4B5563' : '#E5E7EB',
-    },
   };
 
   return (
@@ -76,16 +40,16 @@ export function Settings() {
         style={styles.scrollView}
         contentContainerStyle={[
           styles.scrollContent,
-          { paddingTop: topPadding + 20 }
+          { paddingTop: topPadding + 20 },
         ]}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
         <View style={styles.header}>
-          <Text style={[styles.title, dynamicStyles.text]}>{t('settings.title')}</Text>
+          <Text style={[styles.title, dynamicStyles.text]}>
+            {t('settings.title')}
+          </Text>
         </View>
 
-        {/* Основна валута */}
         <View style={[styles.settingCard, dynamicStyles.card]}>
           <Text style={[styles.settingLabel, dynamicStyles.text]}>
             {t('settings.currency')}
@@ -94,7 +58,9 @@ export function Settings() {
             <TouchableOpacity
               style={[
                 styles.option,
-                currency === 'BGN' ? styles.optionActive : dynamicStyles.optionInactive,
+                currency === 'BGN'
+                  ? styles.optionActive
+                  : dynamicStyles.optionInactive,
               ]}
               onPress={() => handleCurrencyChange('BGN')}
             >
@@ -102,7 +68,9 @@ export function Settings() {
               <Text
                 style={[
                   styles.optionText,
-                  currency === 'BGN' ? styles.optionTextActive : dynamicStyles.text,
+                  currency === 'BGN'
+                    ? styles.optionTextActive
+                    : dynamicStyles.text,
                 ]}
               >
                 {t('settings.bgn')}
@@ -111,7 +79,9 @@ export function Settings() {
             <TouchableOpacity
               style={[
                 styles.option,
-                currency === 'EUR' ? styles.optionActive : dynamicStyles.optionInactive,
+                currency === 'EUR'
+                  ? styles.optionActive
+                  : dynamicStyles.optionInactive,
               ]}
               onPress={() => handleCurrencyChange('EUR')}
             >
@@ -119,7 +89,9 @@ export function Settings() {
               <Text
                 style={[
                   styles.optionText,
-                  currency === 'EUR' ? styles.optionTextActive : dynamicStyles.text,
+                  currency === 'EUR'
+                    ? styles.optionTextActive
+                    : dynamicStyles.text,
                 ]}
               >
                 {t('settings.eur')}
@@ -128,7 +100,6 @@ export function Settings() {
           </View>
         </View>
 
-        {/* Език */}
         <View style={[styles.settingCard, dynamicStyles.card]}>
           <Text style={[styles.settingLabel, dynamicStyles.text]}>
             {t('settings.language')}
@@ -137,7 +108,9 @@ export function Settings() {
             <TouchableOpacity
               style={[
                 styles.option,
-                language === 'bg' ? styles.optionActive : dynamicStyles.optionInactive,
+                language === 'bg'
+                  ? styles.optionActive
+                  : dynamicStyles.optionInactive,
               ]}
               onPress={() => handleLanguageChange('bg')}
             >
@@ -145,7 +118,9 @@ export function Settings() {
               <Text
                 style={[
                   styles.optionText,
-                  language === 'bg' ? styles.optionTextActive : dynamicStyles.text,
+                  language === 'bg'
+                    ? styles.optionTextActive
+                    : dynamicStyles.text,
                 ]}
               >
                 {t('settings.bulgarian')}
@@ -154,7 +129,9 @@ export function Settings() {
             <TouchableOpacity
               style={[
                 styles.option,
-                language === 'en' ? styles.optionActive : dynamicStyles.optionInactive,
+                language === 'en'
+                  ? styles.optionActive
+                  : dynamicStyles.optionInactive,
               ]}
               onPress={() => handleLanguageChange('en')}
             >
@@ -162,7 +139,9 @@ export function Settings() {
               <Text
                 style={[
                   styles.optionText,
-                  language === 'en' ? styles.optionTextActive : dynamicStyles.text,
+                  language === 'en'
+                    ? styles.optionTextActive
+                    : dynamicStyles.text,
                 ]}
               >
                 {t('settings.english')}
@@ -171,7 +150,6 @@ export function Settings() {
           </View>
         </View>
 
-        {/* Тема */}
         <View style={[styles.settingCard, dynamicStyles.card]}>
           <Text style={[styles.settingLabel, dynamicStyles.text]}>
             {t('settings.theme')}
@@ -180,19 +158,29 @@ export function Settings() {
             <TouchableOpacity
               style={[
                 styles.option,
-                theme === 'light' ? styles.optionActive : dynamicStyles.optionInactive,
+                theme === 'light'
+                  ? styles.optionActive
+                  : dynamicStyles.optionInactive,
               ]}
               onPress={() => handleThemeChange('light')}
             >
-              <Ionicons 
-                name="sunny-outline" 
-                size={20} 
-                color={theme === 'light' ? '#FFFFFF' : (isDark ? '#F9FAFB' : '#1F2937')} 
+              <Ionicons
+                name="sunny-outline"
+                size={20}
+                color={
+                  theme === 'light'
+                    ? '#FFFFFF'
+                    : isDark
+                      ? '#F9FAFB'
+                      : '#1F2937'
+                }
               />
               <Text
                 style={[
                   styles.optionText,
-                  theme === 'light' ? styles.optionTextActive : dynamicStyles.text,
+                  theme === 'light'
+                    ? styles.optionTextActive
+                    : dynamicStyles.text,
                 ]}
               >
                 {t('settings.light')}
@@ -201,19 +189,25 @@ export function Settings() {
             <TouchableOpacity
               style={[
                 styles.option,
-                theme === 'dark' ? styles.optionActive : dynamicStyles.optionInactive,
+                theme === 'dark'
+                  ? styles.optionActive
+                  : dynamicStyles.optionInactive,
               ]}
               onPress={() => handleThemeChange('dark')}
             >
-              <Ionicons 
-                name="moon-outline" 
-                size={20} 
-                color={theme === 'dark' ? '#FFFFFF' : (isDark ? '#F9FAFB' : '#1F2937')} 
+              <Ionicons
+                name="moon-outline"
+                size={20}
+                color={
+                  theme === 'dark' ? '#FFFFFF' : isDark ? '#F9FAFB' : '#1F2937'
+                }
               />
               <Text
                 style={[
                   styles.optionText,
-                  theme === 'dark' ? styles.optionTextActive : dynamicStyles.text,
+                  theme === 'dark'
+                    ? styles.optionTextActive
+                    : dynamicStyles.text,
                 ]}
               >
                 {t('settings.dark')}
@@ -222,7 +216,6 @@ export function Settings() {
           </View>
         </View>
 
-        {/* Версия */}
         <Text style={[styles.versionText, dynamicStyles.secondaryText]}>
           {t('app.version')}
         </Text>
@@ -230,69 +223,3 @@ export function Settings() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  scrollView: {
-    flex: 1,
-  },
-  scrollContent: {
-    paddingHorizontal: 20,
-    // paddingTop се задава динамично
-    paddingBottom: 40,
-  },
-  header: {
-    marginBottom: 32,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: '700',
-  },
-  settingCard: {
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 16,
-    borderWidth: 1,
-  },
-  settingLabel: {
-    fontSize: 17,
-    fontWeight: '600',
-    marginBottom: 16,
-  },
-  optionsRow: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  option: {
-    flex: 1,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 14,
-    paddingHorizontal: 12,
-    borderRadius: 12,
-    borderWidth: 2,
-    gap: 8,
-  },
-  optionActive: {
-    backgroundColor: '#7C3AED',
-    borderColor: '#7C3AED',
-  },
-  optionIcon: {
-    fontSize: 20,
-  },
-  optionText: {
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  optionTextActive: {
-    color: '#FFFFFF',
-  },
-  versionText: {
-    textAlign: 'center',
-    fontSize: 14,
-    marginTop: 24,
-  },
-});
