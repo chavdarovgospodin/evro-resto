@@ -45,37 +45,38 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
   const topPadding = getTopPadding(insets);
 
   const [receivedBgn, setReceivedBgn] = useState<number>(0);
+  const [receivedEur, setReceivedEur] = useState<number>(0);
+  const [receivedBgnText, setReceivedBgnText] = useState('');
+  const [receivedEurText, setReceivedEurText] = useState('');
   const [billBgn, setBillBgn] = useState<number>(0);
-  const [received, setReceived] = useState('');
   const [bill, setBill] = useState('');
-  const [receivedCurrency, setReceivedCurrency] =
-    useState<CurrencyType>(defaultCurrency);
   const [billCurrency, setBillCurrency] =
     useState<CurrencyType>(defaultCurrency);
   const [error, setError] = useState<string>('');
-  const [receivedFocused, setReceivedFocused] = useState(false);
+  const [receivedBgnFocused, setReceivedBgnFocused] = useState(false);
+  const [receivedEurFocused, setReceivedEurFocused] = useState(false);
   const [billFocused, setBillFocused] = useState(false);
 
   const billInputRef = useRef<TextInput>(null);
-  const receivedInputRef = useRef<TextInput>(null);
+  const receivedBgnInputRef = useRef<TextInput>(null);
+  const receivedEurInputRef = useRef<TextInput>(null);
 
   useEffect(() => {
-    setReceivedCurrency(defaultCurrency);
     setBillCurrency(defaultCurrency);
   }, [defaultCurrency]);
 
   // Мемоизирано изчисление на рестото
   const changeResult = useMemo(
-    () =>
-      calculateChange(
-        receivedCurrency === 'BGN'
-          ? receivedBgn
-          : convertEurToBgn(parseCurrencyString(received)),
-        billCurrency === 'BGN'
-          ? billBgn
-          : convertEurToBgn(parseCurrencyString(bill))
-      ),
-    [receivedBgn, billBgn, receivedCurrency, billCurrency, received, bill]
+    () => {
+      // Сумираме плащането в лева (BGN + конвертираното EUR)
+      const totalReceivedBgn = receivedBgn + convertEurToBgn(receivedEur);
+      const totalBillBgn = billCurrency === 'BGN'
+        ? billBgn
+        : convertEurToBgn(parseCurrencyString(bill));
+      
+      return calculateChange(totalReceivedBgn, totalBillBgn);
+    },
+    [receivedBgn, receivedEur, billBgn, billCurrency, bill]
   );
 
   useEffect(() => {
@@ -93,7 +94,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
     }
   }, [changeResult, t]);
 
-  const handleReceivedChange = useCallback(
+  const handleReceivedBgnChange = useCallback(
     (text: string) => {
       const filteredText = sanitizeCurrencyInput(text);
       const amount = parseCurrencyString(filteredText);
@@ -103,15 +104,47 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
         return;
       }
 
-      setReceived(filteredText);
-      if (receivedCurrency === 'BGN') {
-        setReceivedBgn(amount);
-      } else {
-        setReceivedBgn(convertEurToBgn(amount));
-      }
+      setReceivedBgnText(filteredText);
+      setReceivedBgn(amount);
     },
-    [receivedCurrency, t]
+    [t]
   );
+
+  const handleReceivedBgnBlur = useCallback(() => {
+    setReceivedBgnFocused(false);
+    if (receivedBgnText.trim()) {
+      const amount = parseCurrencyString(receivedBgnText);
+      if (amount > 0) {
+        setReceivedBgnText(formatAmount(amount));
+      }
+    }
+  }, [receivedBgnText]);
+
+  const handleReceivedEurChange = useCallback(
+    (text: string) => {
+      const filteredText = sanitizeCurrencyInput(text);
+      const amount = parseCurrencyString(filteredText);
+
+      if (!isAmountValid(amount)) {
+        setError(t('error.tooLarge'));
+        return;
+      }
+
+      setReceivedEurText(filteredText);
+      setReceivedEur(amount);
+    },
+    [t]
+  );
+
+  const handleReceivedEurBlur = useCallback(() => {
+    setReceivedEurFocused(false);
+    if (receivedEurText.trim()) {
+      const amount = parseCurrencyString(receivedEurText);
+      if (amount > 0) {
+        setReceivedEurText(formatAmount(amount));
+      }
+    }
+  }, [receivedEurText]);
 
   const handleBillChange = useCallback(
     (text: string) => {
@@ -133,17 +166,32 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
     [billCurrency, t]
   );
 
-  const handleReceivedQuickAmount = useCallback(
+  const handleBillBlur = useCallback(() => {
+    setBillFocused(false);
+    if (bill.trim()) {
+      const amount = parseCurrencyString(bill);
+      if (amount > 0) {
+        setBill(formatAmount(amount));
+      }
+    }
+  }, [bill]);
+
+  const handleReceivedBgnQuickAmount = useCallback(
     (amount: number) => {
       const formatted = formatAmount(amount);
-      setReceived(formatted);
-      if (receivedCurrency === 'BGN') {
-        setReceivedBgn(amount);
-      } else {
-        setReceivedBgn(convertEurToBgn(amount));
-      }
+      setReceivedBgnText(formatted);
+      setReceivedBgn(amount);
     },
-    [receivedCurrency]
+    []
+  );
+
+  const handleReceivedEurQuickAmount = useCallback(
+    (amount: number) => {
+      const formatted = formatAmount(amount);
+      setReceivedEurText(formatted);
+      setReceivedEur(amount);
+    },
+    []
   );
 
   const handleBillQuickAmount = useCallback(
@@ -159,24 +207,6 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
     [billCurrency]
   );
 
-  const handleReceivedCurrencySwitch = useCallback(() => {
-    const newCurrency = receivedCurrency === 'BGN' ? 'EUR' : 'BGN';
-    triggerHapticLight();
-
-    // Обновяваме BGN стойността базирано на новата валута и текущата стойност в полето
-    if (received.trim()) {
-      const amount = parseCurrencyString(received);
-      if (newCurrency === 'BGN') {
-        setReceivedBgn(amount);
-      } else {
-        setReceivedBgn(convertEurToBgn(amount));
-      }
-    } else {
-      setReceivedBgn(0);
-    }
-
-    setReceivedCurrency(newCurrency);
-  }, [receivedCurrency, received]);
 
   const handleBillCurrencySwitch = useCallback(() => {
     const newCurrency = billCurrency === 'BGN' ? 'EUR' : 'BGN';
@@ -203,17 +233,19 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
   }, [onOpenSettings]);
 
   const handleClear = useCallback(() => {
-    setReceived('');
+    setReceivedBgnText('');
+    setReceivedEurText('');
     setBill('');
     setReceivedBgn(0);
+    setReceivedEur(0);
     setBillBgn(0);
     setError('');
     Keyboard.dismiss();
   }, []);
 
   const hasContent = useMemo(
-    () => received.trim() || bill.trim(),
-    [received, bill]
+    () => receivedBgnText.trim() || receivedEurText.trim() || bill.trim(),
+    [receivedBgnText, receivedEurText, bill]
   );
 
   // Мемоизирани динамични стилове
@@ -236,8 +268,20 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.topBar}>
-          <View style={styles.header}>
-            <Text style={styles.title}>{t('app.subtitle')}</Text>
+          <View
+            style={[
+              styles.exchangeRateBadge,
+              memoizedDynamicStyles.exchangeRate,
+            ]}
+          >
+            <Text
+              style={[
+                styles.exchangeRateText,
+                memoizedDynamicStyles.secondaryText,
+              ]}
+            >
+              {t('calc.exchangeRate')}
+            </Text>
           </View>
           {onOpenSettings && (
             <TouchableOpacity
@@ -257,27 +301,31 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
           )}
         </View>
 
+        <View style={styles.header}>
+          <Text style={styles.title}>{t('app.subtitle')}</Text>
+        </View>
+
         <View style={styles.inputsContainer}>
           <View style={styles.inputGroup}>
             <Text style={[styles.inputLabel, memoizedDynamicStyles.text]}>
               {t('calc.bill')}
             </Text>
             <View style={styles.inputWrapper}>
-              <TextInput
-                ref={billInputRef}
-                style={[
-                  styles.input,
-                  memoizedDynamicStyles.input,
-                  billFocused && styles.inputFocused,
-                ]}
-                value={bill}
-                onChangeText={handleBillChange}
-                onFocus={() => setBillFocused(true)}
-                onBlur={() => setBillFocused(false)}
-                placeholder="0.00"
-                placeholderTextColor="#9CA3AF"
-                keyboardType="numeric"
-              />
+                <TextInput
+                  ref={billInputRef}
+                  style={[
+                    styles.input,
+                    memoizedDynamicStyles.input,
+                    billFocused && styles.inputFocused,
+                  ]}
+                  value={bill}
+                  onChangeText={handleBillChange}
+                  onFocus={() => setBillFocused(true)}
+                  onBlur={handleBillBlur}
+                  placeholder="0.00"
+                  placeholderTextColor="#9CA3AF"
+                  keyboardType="numeric"
+                />
               <TouchableOpacity
                 style={[
                   styles.currencyButtonInField,
@@ -318,56 +366,104 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
             <Text style={[styles.inputLabel, memoizedDynamicStyles.text]}>
               {t('calc.received')}
             </Text>
-            <View style={styles.inputWrapper}>
-              <TextInput
-                ref={receivedInputRef}
-                style={[
-                  styles.input,
-                  memoizedDynamicStyles.input,
-                  receivedFocused && styles.inputFocused,
-                ]}
-                value={received}
-                onChangeText={handleReceivedChange}
-                onFocus={() => setReceivedFocused(true)}
-                onBlur={() => setReceivedFocused(false)}
-                placeholder="0.00"
-                placeholderTextColor="#9CA3AF"
-                keyboardType="numeric"
-              />
-              <TouchableOpacity
-                style={[
-                  styles.currencyButtonInField,
-                  memoizedDynamicStyles.currencyButtonInField,
-                ]}
-                onPress={handleReceivedCurrencySwitch}
-                activeOpacity={0.7}
-              >
+            <View style={styles.combinedInputContainer}>
+              <View style={styles.combinedInputWrapper}>
+                <TextInput
+                  ref={receivedBgnInputRef}
+                  style={[
+                    styles.combinedInput,
+                    memoizedDynamicStyles.input,
+                    receivedBgnFocused && styles.inputFocused,
+                  ]}
+                  value={receivedBgnText}
+                  onChangeText={handleReceivedBgnChange}
+                  onFocus={() => setReceivedBgnFocused(true)}
+                  onBlur={handleReceivedBgnBlur}
+                  placeholder="0.00"
+                  placeholderTextColor="#9CA3AF"
+                  keyboardType="numeric"
+                />
                 <Text
                   style={[
-                    styles.currencyButtonInFieldText,
-                    memoizedDynamicStyles.text,
+                    styles.combinedCurrency,
+                    memoizedDynamicStyles.secondaryText,
                   ]}
                 >
-                  {receivedCurrency === 'BGN' ? '🇧🇬' : '🇪🇺'}{' '}
-                  {receivedCurrency === 'BGN'
-                    ? t('currency.lv')
-                    : t('currency.euro')}
+                  🇧🇬 {t('currency.lv')}
                 </Text>
-                <Ionicons
-                  name="swap-horizontal"
-                  size={16}
-                  color={isDark ? '#9CA3AF' : '#6B7280'}
-                  style={styles.currencyButtonIcon}
+              </View>
+              <Text
+                style={[
+                  styles.combinedSeparator,
+                  memoizedDynamicStyles.secondaryText,
+                ]}
+              >
+                +
+              </Text>
+              <View style={styles.combinedInputWrapper}>
+                <TextInput
+                  ref={receivedEurInputRef}
+                  style={[
+                    styles.combinedInput,
+                    memoizedDynamicStyles.input,
+                    receivedEurFocused && styles.inputFocused,
+                  ]}
+                  value={receivedEurText}
+                  onChangeText={handleReceivedEurChange}
+                  onFocus={() => setReceivedEurFocused(true)}
+                  onBlur={handleReceivedEurBlur}
+                  placeholder="0.00"
+                  placeholderTextColor="#9CA3AF"
+                  keyboardType="numeric"
                 />
-              </TouchableOpacity>
+                <Text
+                  style={[
+                    styles.combinedCurrency,
+                    memoizedDynamicStyles.secondaryText,
+                  ]}
+                >
+                  🇪🇺 {t('currency.euro')}
+                </Text>
+              </View>
             </View>
-            <QuickAmounts
-              amounts={[5, 10, 20, 50, 100]}
-              onSelect={handleReceivedQuickAmount}
-              currency={receivedCurrency}
-              isDark={isDark}
-              language={language}
-            />
+            <View style={styles.quickAmountsRow}>
+              <View style={styles.quickAmountsColumn}>
+                <Text
+                  style={[
+                    styles.quickAmountsLabel,
+                    memoizedDynamicStyles.secondaryText,
+                  ]}
+                >
+                  {t('currency.lv')}
+                </Text>
+                <QuickAmounts
+                  amounts={[5, 10, 20, 50, 100]}
+                  onSelect={handleReceivedBgnQuickAmount}
+                  currency="BGN"
+                  isDark={isDark}
+                  language={language}
+                  size="small"
+                />
+              </View>
+              <View style={styles.quickAmountsColumn}>
+                <Text
+                  style={[
+                    styles.quickAmountsLabel,
+                    memoizedDynamicStyles.secondaryText,
+                  ]}
+                >
+                  {t('currency.euro')}
+                </Text>
+                <QuickAmounts
+                  amounts={[5, 10, 20, 50, 100]}
+                  onSelect={handleReceivedEurQuickAmount}
+                  currency="EUR"
+                  isDark={isDark}
+                  language={language}
+                  size="small"
+                />
+              </View>
+            </View>
           </View>
 
           {error && (
@@ -382,14 +478,14 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
             </View>
           )}
 
-          {received.trim() &&
+          {(receivedBgnText.trim() || receivedEurText.trim()) &&
             bill.trim() &&
             changeResult.isValid &&
             (changeResult.bgn > 0 || changeResult.eur > 0 ? (
               <ChangeDisplay
                 changeBgn={changeResult.bgn}
                 changeEur={changeResult.eur}
-                primaryCurrency={receivedCurrency}
+                primaryCurrency="BGN"
                 isDark={isDark}
                 language={language}
               />

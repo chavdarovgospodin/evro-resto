@@ -23,7 +23,7 @@ const STORAGE_KEYS = {
 };
 
 const defaultSettings: AppSettings = {
-  currency: 'BGN',
+  currency: 'EUR',
   language: 'bg',
   theme: 'system',
 };

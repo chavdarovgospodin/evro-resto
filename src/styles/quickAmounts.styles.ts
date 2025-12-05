@@ -22,6 +22,14 @@ export const quickAmountsStyles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
   },
+  amountButtonSmall: {
+    flex: 1,
+    marginHorizontal: 3,
+    paddingVertical: 8,
+    borderRadius: 10,
+    alignItems: 'center',
+    borderWidth: 1,
+  },
   amountButtonPressed: {
     backgroundColor: '#7C3AED',
     borderColor: '#7C3AED',
@@ -31,12 +39,20 @@ export const quickAmountsStyles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '700',
   },
+  amountTextSmall: {
+    fontSize: 14,
+    fontWeight: '700',
+  },
   amountTextPressed: {
     color: '#FFFFFF',
   },
   currencyText: {
     fontSize: 12,
     marginTop: 2,
+  },
+  currencyTextSmall: {
+    fontSize: 10,
+    marginTop: 1,
   },
   currencyTextPressed: {
     color: '#FFFFFF',

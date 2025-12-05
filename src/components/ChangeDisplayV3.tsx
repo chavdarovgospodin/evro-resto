@@ -64,17 +64,17 @@ export function ChangeDisplayV3({
           Ресто:
         </Text>
 
-        {/* BGN ред */}
+        {/* EUR ред */}
         <View style={styles.amountRow}>
           <View style={styles.flagContainer}>
-            <Text style={styles.flag}>🇧🇬</Text>
+            <Text style={styles.flag}>🇪🇺</Text>
           </View>
           <View style={styles.amountContent}>
             <Text style={[styles.amount, { color: colors.text }]}>
-              {formatAmount(changeBgn)}
+              {formatAmount(changeEur)}
             </Text>
             <Text style={[styles.currencyLabel, { color: colors.secondaryText }]}>
-              {t.leva}
+              {t.euro}
             </Text>
           </View>
         </View>
@@ -88,17 +88,17 @@ export function ChangeDisplayV3({
           <View style={[styles.separatorLine, { backgroundColor: colors.border }]} />
         </View>
 
-        {/* EUR ред */}
+        {/* BGN ред */}
         <View style={styles.amountRow}>
           <View style={styles.flagContainer}>
-            <Text style={styles.flag}>🇪🇺</Text>
+            <Text style={styles.flag}>🇧🇬</Text>
           </View>
           <View style={styles.amountContent}>
             <Text style={[styles.amount, { color: colors.text }]}>
-              {formatAmount(changeEur)}
+              {formatAmount(changeBgn)}
             </Text>
             <Text style={[styles.currencyLabel, { color: colors.secondaryText }]}>
-              {t.euro}
+              {t.leva}
             </Text>
           </View>
         </View>

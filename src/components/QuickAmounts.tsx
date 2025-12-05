@@ -12,6 +12,7 @@ export function QuickAmounts({
   currency,
   isDark = false,
   language = 'bg',
+  size = 'normal',
 }: QuickAmountsProps) {
   const [pressedIndex, setPressedIndex] = useState<number | null>(null);
   const t = quickAmountsTranslations[language];
@@ -42,15 +43,21 @@ export function QuickAmounts({
     [currency, t]
   );
 
+  const buttonStyle = size === 'small' ? styles.amountButtonSmall : styles.amountButton;
+  const textStyle = size === 'small' ? styles.amountTextSmall : styles.amountText;
+  const currencyTextStyle = size === 'small' ? styles.currencyTextSmall : styles.currencyText;
+
   return (
     <View style={styles.container}>
-      <Text style={[styles.title, dynamicStyles.title]}>{t.title}</Text>
+      {size === 'normal' && (
+        <Text style={[styles.title, dynamicStyles.title]}>{t.title}</Text>
+      )}
       <View style={styles.buttonContainer}>
         {amounts.map((amount, index) => (
           <TouchableOpacity
             key={index}
             style={[
-              styles.amountButton,
+              buttonStyle,
               pressedIndex === index
                 ? styles.amountButtonPressed
                 : dynamicStyles.buttonNormal,
@@ -60,7 +67,7 @@ export function QuickAmounts({
           >
             <Text
               style={[
-                styles.amountText,
+                textStyle,
                 pressedIndex === index
                   ? styles.amountTextPressed
                   : dynamicStyles.textNormal,
@@ -70,7 +77,7 @@ export function QuickAmounts({
             </Text>
             <Text
               style={[
-                styles.currencyText,
+                currencyTextStyle,
                 pressedIndex === index
                   ? styles.currencyTextPressed
                   : dynamicStyles.currencyNormal,

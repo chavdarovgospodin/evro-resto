@@ -16,7 +16,16 @@ export const calculatorStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 12,
+  },
+  exchangeRateBadge: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+  },
+  exchangeRateText: {
+    fontSize: 12,
+    fontWeight: '500',
   },
   settingsButton: {
     width: 40,
@@ -26,7 +35,8 @@ export const calculatorStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    flex: 1,
+    alignItems: 'center',
+    marginBottom: 10,
   },
   title: {
     fontSize: 34,
@@ -144,5 +154,52 @@ export const calculatorStyles = StyleSheet.create({
   clearButtonTextDisabled: {
     color: '#9CA3AF',
   },
+  combinedInputContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    width: '100%',
+  },
+  combinedInputWrapper: {
+    position: 'relative',
+    flex: 1,
+    minWidth: 0,
+  },
+  combinedInput: {
+    borderWidth: 1,
+    borderRadius: 14,
+    paddingHorizontal: 14,
+    paddingVertical: 14,
+    paddingRight: 60,
+    fontSize: 20,
+    width: '100%',
+  },
+  combinedCurrency: {
+    position: 'absolute',
+    right: 10,
+    top: '50%',
+    transform: [{ translateY: -10 }],
+    fontSize: 13,
+    fontWeight: '600',
+  },
+  combinedSeparator: {
+    fontSize: 20,
+    fontWeight: '700',
+    minWidth: 24,
+    textAlign: 'center',
+  },
+  quickAmountsRow: {
+    flexDirection: 'row',
+    gap: 12,
+    marginTop: 8,
+  },
+  quickAmountsColumn: {
+    flex: 1,
+  },
+  quickAmountsLabel: {
+    fontSize: 12,
+    fontWeight: '500',
+    marginBottom: 6,
+    textAlign: 'center',
+  },
 });
-

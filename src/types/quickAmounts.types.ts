@@ -6,5 +6,6 @@ export interface QuickAmountsProps {
   currency: 'BGN' | 'EUR';
   isDark?: boolean;
   language?: LanguageType;
+  size?: 'normal' | 'small';
 }
 

@@ -57,27 +57,6 @@ export function Settings() {
             <TouchableOpacity
               style={[
                 styles.option,
-                currency === 'BGN'
-                  ? styles.optionActive
-                  : dynamicStyles.optionInactive,
-              ]}
-              onPress={() => handleCurrencyChange('BGN')}
-            >
-              <Text style={styles.optionIcon}>🇧🇬</Text>
-              <Text
-                style={[
-                  styles.optionText,
-                  currency === 'BGN'
-                    ? styles.optionTextActive
-                    : dynamicStyles.text,
-                ]}
-              >
-                {t('settings.bgn')}
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.option,
                 currency === 'EUR'
                   ? styles.optionActive
                   : dynamicStyles.optionInactive,
@@ -94,6 +73,27 @@ export function Settings() {
                 ]}
               >
                 {t('settings.eur')}
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.option,
+                currency === 'BGN'
+                  ? styles.optionActive
+                  : dynamicStyles.optionInactive,
+              ]}
+              onPress={() => handleCurrencyChange('BGN')}
+            >
+              <Text style={styles.optionIcon}>🇧🇬</Text>
+              <Text
+                style={[
+                  styles.optionText,
+                  currency === 'BGN'
+                    ? styles.optionTextActive
+                    : dynamicStyles.text,
+                ]}
+              >
+                {t('settings.bgn')}
               </Text>
             </TouchableOpacity>
           </View>
@@ -167,11 +167,7 @@ export function Settings() {
                 name="sunny-outline"
                 size={18}
                 color={
-                  theme === 'light'
-                    ? '#FFFFFF'
-                    : isDark
-                      ? '#F9FAFB'
-                      : '#1F2937'
+                  theme === 'light' ? '#FFFFFF' : isDark ? '#F9FAFB' : '#1F2937'
                 }
               />
               <Text
@@ -228,8 +224,8 @@ export function Settings() {
                   theme === 'system'
                     ? '#FFFFFF'
                     : isDark
-                      ? '#F9FAFB'
-                      : '#1F2937'
+                    ? '#F9FAFB'
+                    : '#1F2937'
                 }
               />
               <Text
