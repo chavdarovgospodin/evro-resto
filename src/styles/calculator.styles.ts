@@ -16,16 +16,7 @@ export const calculatorStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
-  },
-  exchangeRateBadge: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-  },
-  exchangeRateText: {
-    fontSize: 12,
-    fontWeight: '500',
+    marginBottom: 20,
   },
   settingsButton: {
     width: 40,
@@ -35,8 +26,7 @@ export const calculatorStyles = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    alignItems: 'center',
-    marginBottom: 22,
+    flex: 1,
   },
   title: {
     fontSize: 34,
@@ -47,44 +37,6 @@ export const calculatorStyles = StyleSheet.create({
   subtitle: {
     fontSize: 15,
     textAlign: 'center',
-  },
-  currencySelector: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 20,
-    gap: 10,
-  },
-  currencyButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 14,
-    borderRadius: 28,
-    borderWidth: 1,
-    minWidth: 140,
-    alignItems: 'center',
-  },
-  currencyButtonActive: {
-    backgroundColor: '#7C3AED',
-    borderColor: '#7C3AED',
-  },
-  currencyButtonText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  currencyButtonTextActive: {
-    color: '#FFFFFF',
-  },
-  swapButton: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  swapButtonText: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#7C3AED',
   },
   inputsContainer: {
     width: '100%',
@@ -105,20 +57,31 @@ export const calculatorStyles = StyleSheet.create({
     borderRadius: 14,
     paddingHorizontal: 18,
     paddingVertical: 14,
-    paddingRight: 55,
+    paddingRight: 120,
     fontSize: 22,
   },
   inputFocused: {
     borderColor: '#7C3AED',
     borderWidth: 2,
   },
-  currencySymbol: {
+  currencyButtonInField: {
     position: 'absolute',
-    right: 18,
+    right: 12,
     top: '50%',
-    transform: [{ translateY: -12 }],
-    fontSize: 18,
-    fontWeight: '500',
+    transform: [{ translateY: -18 }],
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    borderRadius: 8,
+    gap: 4,
+  },
+  currencyButtonInFieldText: {
+    fontSize: 15,
+    fontWeight: '600',
+  },
+  currencyButtonIcon: {
+    marginLeft: 2,
   },
   errorContainer: {
     flexDirection: 'row',

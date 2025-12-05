@@ -71,16 +71,10 @@ export const getCalculatorDynamicStyles = (isDark: boolean) => ({
       ? colors.dark.backgroundSecondary
       : colors.light.backgroundSecondary,
   },
-  currencyButtonInactive: {
+  currencyButtonInField: {
     backgroundColor: isDark
       ? colors.dark.backgroundSecondary
-      : colors.light.background,
-    borderColor: isDark ? colors.dark.border : colors.light.border,
-  },
-  swapButton: {
-    backgroundColor: isDark
-      ? colors.dark.primaryLight
-      : colors.light.primaryLight,
+      : colors.light.backgroundTertiary,
   },
 });
 

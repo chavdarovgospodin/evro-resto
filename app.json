@@ -20,8 +20,10 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "minSdkVersion": 23,
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "package": "com.gchav.evroresto"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -32,6 +34,12 @@
     "scheme": "evro-resto",
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "5c32554c-0e1d-43a2-8eef-2a21c6c198c9"
+      }
     }
   }
 }

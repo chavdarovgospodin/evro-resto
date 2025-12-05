@@ -14,12 +14,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { formatAmount } from '../utils/formatter';
-import { getDenominationBreakdown } from '../utils/calculator';
-import { isBanknote } from '../utils/currency';
-import { triggerHapticLight } from '../utils/haptics';
 import { changeDisplayTranslations } from '../translations/changeDisplay.translations';
 import type { ChangeDisplayProps } from '../types/changeDisplay.types';
-import type { CurrencyType } from '../types';
 
 export function ChangeDisplayV3({
   changeBgn,
@@ -28,8 +24,6 @@ export function ChangeDisplayV3({
   language = 'bg',
 }: ChangeDisplayProps) {
   const fadeAnim = React.useRef(new Animated.Value(0)).current;
-  const [breakdownCurrency, setBreakdownCurrency] =
-    useState<CurrencyType>('BGN');
   const t = changeDisplayTranslations[language];
 
   const colors = {
@@ -50,17 +44,6 @@ export function ChangeDisplayV3({
       }).start();
     }
   }, [changeBgn, changeEur, fadeAnim]);
-
-  const toggleBreakdownCurrency = useCallback(() => {
-    triggerHapticLight();
-    setBreakdownCurrency((prev) => (prev === 'BGN' ? 'EUR' : 'BGN'));
-  }, []);
-
-  const currentAmount = breakdownCurrency === 'BGN' ? changeBgn : changeEur;
-  const denominations = useMemo(
-    () => getDenominationBreakdown(currentAmount, breakdownCurrency),
-    [currentAmount, breakdownCurrency]
-  );
 
   return (
     <Animated.View
@@ -120,55 +103,6 @@ export function ChangeDisplayV3({
           </View>
         </View>
 
-        {/* Разбивка */}
-        {denominations.length > 0 && (
-          <View style={[styles.breakdown, { borderTopColor: colors.border }]}>
-            <TouchableOpacity
-              style={[styles.breakdownToggle, { backgroundColor: colors.accentLight }]}
-              onPress={toggleBreakdownCurrency}
-            >
-              <Text style={styles.breakdownFlag}>
-                {breakdownCurrency === 'BGN' ? '🇧🇬' : '🇪🇺'}
-              </Text>
-              <Text style={[styles.breakdownTitle, { color: colors.text }]}>
-                {t.breakdownIn} {breakdownCurrency === 'BGN' ? t.leva : t.euro}
-              </Text>
-              <View style={[styles.switchIcon, { backgroundColor: colors.accent }]}>
-                <Ionicons name="repeat" size={14} color="#FFFFFF" />
-              </View>
-            </TouchableOpacity>
-
-            <View style={styles.denominationsGrid}>
-              {denominations.map((item, index) => (
-                <View
-                  key={index}
-                  style={[
-                    styles.denomItem,
-                    { backgroundColor: colors.accentLight },
-                  ]}
-                >
-                  {isBanknote(item.denomination, breakdownCurrency) ? (
-                    <Text style={styles.denomIcon}>💶</Text>
-                  ) : (
-                    <Text style={styles.denomIcon}>🪙</Text>
-                  )}
-                  <Text style={[styles.denomCount, { color: colors.accent }]}>
-                    {item.count}×
-                  </Text>
-                  <Text style={[styles.denomValue, { color: colors.text }]}>
-                    {item.denomination < 1
-                      ? `${Math.round(item.denomination * 100)} ${
-                          breakdownCurrency === 'BGN' ? t.stotinki : t.cents
-                        }`
-                      : `${item.denomination} ${
-                          breakdownCurrency === 'BGN' ? t.lv : t.euroSymbol
-                        }`}
-                  </Text>
-                </View>
-              ))}
-            </View>
-          </View>
-        )}
       </View>
     </Animated.View>
   );
@@ -237,58 +171,5 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
     marginHorizontal: 12,
-  },
-  breakdown: {
-    marginTop: 16,
-    paddingTop: 16,
-    borderTopWidth: 1,
-  },
-  breakdownToggle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 12,
-    gap: 8,
-  },
-  breakdownFlag: {
-    fontSize: 18,
-  },
-  breakdownTitle: {
-    fontSize: 14,
-    fontWeight: '600',
-    flex: 1,
-  },
-  switchIcon: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  denominationsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  denomItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 8,
-    gap: 4,
-  },
-  denomIcon: {
-    fontSize: 14,
-    marginRight: 2,
-  },
-  denomCount: {
-    fontSize: 14,
-    fontWeight: '800',
-  },
-  denomValue: {
-    fontSize: 14,
-    fontWeight: '500',
   },
 });

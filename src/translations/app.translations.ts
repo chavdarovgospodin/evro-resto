@@ -8,7 +8,7 @@ export const translations: Record<LanguageType, Record<string, string>> = {
     'app.version': 'Евро Ресто v1.0.0',
 
     // Калкулатор
-    'calc.received': 'Получих',
+    'calc.received': 'Плащане',
     'calc.bill': 'Сметка',
     'calc.clear': 'Изчисти',
     'calc.quickAmounts': 'Чести суми',
@@ -58,7 +58,7 @@ export const translations: Record<LanguageType, Record<string, string>> = {
     'app.version': 'Euro Change v1.0.0',
 
     // Calculator
-    'calc.received': 'Received',
+    'calc.received': 'Payment',
     'calc.bill': 'Bill',
     'calc.clear': 'Clear',
     'calc.quickAmounts': 'Quick amounts',
