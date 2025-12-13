@@ -16,5 +16,8 @@ export interface AppContextType {
   setTheme: (theme: ThemeType) => void;
   t: (key: string) => string;
   isLoading: boolean;
+  showOnboarding: boolean;
+  completeOnboarding: () => void;
+  resetOnboarding: () => void;
 }
 

@@ -57,7 +57,13 @@ export const calculatorStyles = StyleSheet.create({
   inputLabel: {
     fontSize: 17,
     fontWeight: '600',
+    marginBottom: 6,
+  },
+  inputHint: {
+    fontSize: 13,
+    fontWeight: '400',
     marginBottom: 10,
+    lineHeight: 18,
   },
   inputWrapper: {
     position: 'relative',
@@ -74,17 +80,21 @@ export const calculatorStyles = StyleSheet.create({
     borderColor: '#7C3AED',
     borderWidth: 2,
   },
-  currencyButtonInField: {
+  currencyButtonAnimatedWrapper: {
     position: 'absolute',
     right: 12,
     top: '50%',
-    transform: [{ translateY: -18 }],
+  },
+  currencyButtonInField: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 8,
+    borderRadius: 20,
     gap: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(147, 51, 234, 0.3)',
+    backgroundColor: 'rgba(147, 51, 234, 0.05)',
   },
   currencyButtonInFieldText: {
     fontSize: 15,

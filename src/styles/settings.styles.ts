@@ -77,6 +77,18 @@ export const settingsStyles = StyleSheet.create({
   optionTextActive: {
     color: '#FFFFFF',
   },
+  tutorialButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    gap: 12,
+  },
+  tutorialButtonText: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '500',
+  },
   versionText: {
     textAlign: 'center',
     fontSize: 14,

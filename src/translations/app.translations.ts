@@ -5,11 +5,14 @@ export const translations: Record<LanguageType, Record<string, string>> = {
     // Заглавия
     'app.title': 'Евро Ресто',
     'app.subtitle': 'Изчисли рестото',
-    'app.version': 'Евро Ресто v1.0.0',
+    'app.version': 'Евро Ресто v1.0.2',
 
     // Калкулатор
     'calc.received': 'Плащане',
+    'calc.receivedHint': 'С колко плаща клиентът (може в лева, евро или комбинирано)',
     'calc.bill': 'Сметка',
+    'calc.billHint': 'Въведете сумата на сметката (може в лева или евро)',
+    'calc.billCurrencyHint': 'Натиснете бутона с валутата за смяна',
     'calc.clear': 'Изчисти',
     'calc.quickAmounts': 'Чести суми',
     'calc.exchangeRate': '1 € = 1.95583 лв',
@@ -50,16 +53,20 @@ export const translations: Record<LanguageType, Record<string, string>> = {
     'settings.light': 'Светла',
     'settings.dark': 'Тъмна',
     'settings.system': 'Системна',
+    'settings.showTutorial': 'Покажи tutorial',
   },
   en: {
     // Titles
     'app.title': 'Euro Change',
     'app.subtitle': 'Calculate Change',
-    'app.version': 'Euro Change v1.0.0',
+    'app.version': 'Euro Change v1.0.2',
 
     // Calculator
     'calc.received': 'Payment',
+    'calc.receivedHint': 'What was paid (can be in leva, euro, or combined)',
     'calc.bill': 'Bill',
+    'calc.billHint': 'Enter the bill amount (can be in leva or euro)',
+    'calc.billCurrencyHint': 'Tap the currency button to switch',
     'calc.clear': 'Clear',
     'calc.quickAmounts': 'Quick amounts',
     'calc.exchangeRate': '1 € = 1.95583 BGN',
@@ -100,6 +107,6 @@ export const translations: Record<LanguageType, Record<string, string>> = {
     'settings.light': 'Light',
     'settings.dark': 'Dark',
     'settings.system': 'System',
+    'settings.showTutorial': 'Show tutorial',
   },
 };
-

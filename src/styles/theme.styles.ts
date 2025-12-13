@@ -73,8 +73,11 @@ export const getCalculatorDynamicStyles = (isDark: boolean) => ({
   },
   currencyButtonInField: {
     backgroundColor: isDark
-      ? colors.dark.backgroundSecondary
-      : colors.light.backgroundTertiary,
+      ? 'rgba(147, 51, 234, 0.1)'
+      : 'rgba(147, 51, 234, 0.05)',
+    borderColor: isDark
+      ? 'rgba(147, 51, 234, 0.4)'
+      : 'rgba(147, 51, 234, 0.3)',
   },
 });
 

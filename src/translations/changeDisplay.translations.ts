@@ -13,6 +13,7 @@ export const changeDisplayTranslations: Record<LanguageType, {
   cents: string;
   lv: string;
   euroSymbol: string;
+  info: string;
 }> = {
   bg: {
     headerLabel: 'За връщане:',
@@ -27,6 +28,7 @@ export const changeDisplayTranslations: Record<LanguageType, {
     cents: 'цент',
     lv: 'лв',
     euroSymbol: '€',
+    info: 'Рестото се изчислява автоматично',
   },
   en: {
     headerLabel: 'Change:',
@@ -41,6 +43,7 @@ export const changeDisplayTranslations: Record<LanguageType, {
     cents: 'cent',
     lv: 'lv',
     euroSymbol: '€',
+    info: 'Change is calculated automatically',
   },
 };
 

@@ -11,7 +11,7 @@ import { getSettingsDynamicStyles } from '../styles/theme.styles';
 import type { CurrencyType, LanguageType, ThemeType } from '../types';
 
 export function Settings() {
-  const { settings, isDark, setCurrency, setLanguage, setTheme, t } = useApp();
+  const { settings, isDark, setCurrency, setLanguage, setTheme, t, resetOnboarding } = useApp();
   const { currency, language, theme } = settings;
   const insets = useSafeAreaInsets();
   const topPadding = getTopPadding(insets);
@@ -240,6 +240,31 @@ export function Settings() {
               </Text>
             </TouchableOpacity>
           </View>
+        </View>
+
+        <View style={[styles.settingCard, dynamicStyles.card]}>
+          <TouchableOpacity
+            style={styles.tutorialButton}
+            onPress={() => {
+              triggerHapticLight();
+              resetOnboarding();
+            }}
+            activeOpacity={0.7}
+          >
+            <Ionicons
+              name="school-outline"
+              size={20}
+              color={isDark ? '#A78BFA' : '#7C3AED'}
+            />
+            <Text style={[styles.tutorialButtonText, dynamicStyles.text]}>
+              {t('settings.showTutorial')}
+            </Text>
+            <Ionicons
+              name="chevron-forward"
+              size={20}
+              color={isDark ? '#9CA3AF' : '#6B7280'}
+            />
+          </TouchableOpacity>
         </View>
 
         <Text style={[styles.versionText, dynamicStyles.secondaryText]}>

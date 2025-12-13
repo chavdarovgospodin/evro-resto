@@ -7,9 +7,10 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ErrorBoundary } from 'react-error-boundary';
 import { AppProvider, useApp } from '../src/context/AppContext';
 import { ErrorFallback } from '../src/components/ErrorFallback';
+import { Onboarding } from '../src/components/Onboarding';
 
 function RootLayoutNav() {
-  const { isLoading, isDark } = useApp();
+  const { isLoading, isDark, showOnboarding, completeOnboarding } = useApp();
   const bgColor = isDark ? '#1F2937' : '#FFFFFF';
 
   if (isLoading) {
@@ -52,6 +53,12 @@ function RootLayoutNav() {
         />
       </Stack>
       <StatusBar style={isDark ? 'light' : 'dark'} />
+      {showOnboarding && (
+        <Onboarding
+          onComplete={completeOnboarding}
+          onSkip={completeOnboarding}
+        />
+      )}
     </View>
   );
 }

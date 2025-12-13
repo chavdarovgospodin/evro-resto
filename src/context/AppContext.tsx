@@ -20,6 +20,7 @@ const STORAGE_KEYS = {
   CURRENCY: '@evro_resto_currency',
   LANGUAGE: '@evro_resto_language',
   THEME: '@evro_resto_theme',
+  HAS_SEEN_ONBOARDING: '@evro_resto_has_seen_onboarding',
 };
 
 const defaultSettings: AppSettings = {
@@ -36,6 +37,7 @@ export function AppProvider({ children }: { children: ReactNode }) {
   );
   const [settings, setSettings] = useState<AppSettings>(defaultSettings);
   const [isLoading, setIsLoading] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   // Listen for system theme changes
   useEffect(() => {
@@ -48,7 +50,19 @@ export function AppProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     loadSettings();
+    checkOnboardingStatus();
   }, []);
+
+  const checkOnboardingStatus = async () => {
+    try {
+      const hasSeenOnboarding = await AsyncStorage.getItem(STORAGE_KEYS.HAS_SEEN_ONBOARDING);
+      if (hasSeenOnboarding === null) {
+        setShowOnboarding(true);
+      }
+    } catch (error) {
+      console.error('Error checking onboarding status:', error);
+    }
+  };
 
   const loadSettings = async () => {
     try {
@@ -107,6 +121,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const completeOnboarding = async () => {
+    try {
+      await AsyncStorage.setItem(STORAGE_KEYS.HAS_SEEN_ONBOARDING, 'true');
+      setShowOnboarding(false);
+    } catch (error) {
+      console.error('Error saving onboarding status:', error);
+    }
+  };
+
+  const resetOnboarding = async () => {
+    try {
+      await AsyncStorage.removeItem(STORAGE_KEYS.HAS_SEEN_ONBOARDING);
+      setShowOnboarding(true);
+    } catch (error) {
+      console.error('Error resetting onboarding:', error);
+    }
+  };
+
   const t = (key: string): string => {
     return translations[settings.language][key] || key;
   };
@@ -128,6 +160,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
         setTheme,
         t,
         isLoading,
+        showOnboarding,
+        completeOnboarding,
+        resetOnboarding,
       }}
     >
       {children}

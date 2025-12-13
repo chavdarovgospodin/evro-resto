@@ -12,6 +12,7 @@ import {
   Keyboard,
   TextInput,
   ScrollView,
+  Animated,
 } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -60,24 +61,59 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
   const billInputRef = useRef<TextInput>(null);
   const receivedBgnInputRef = useRef<TextInput>(null);
   const receivedEurInputRef = useRef<TextInput>(null);
+  const currencyButtonPulse = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     setBillCurrency(defaultCurrency);
   }, [defaultCurrency]);
 
+  // Pulse animation for currency button on mount
+  useEffect(() => {
+    const pulseAnimation = Animated.sequence([
+      Animated.timing(currencyButtonPulse, {
+        toValue: 1.15,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+      Animated.timing(currencyButtonPulse, {
+        toValue: 1,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+      Animated.timing(currencyButtonPulse, {
+        toValue: 1.15,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+      Animated.timing(currencyButtonPulse, {
+        toValue: 1,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+    ]);
+
+    // Start animation after a short delay
+    const timer = setTimeout(() => {
+      pulseAnimation.start();
+    }, 500);
+
+    return () => {
+      clearTimeout(timer);
+      pulseAnimation.stop();
+    };
+  }, [currencyButtonPulse]);
+
   // Мемоизирано изчисление на рестото
-  const changeResult = useMemo(
-    () => {
-      // Сумираме плащането в лева (BGN + конвертираното EUR)
-      const totalReceivedBgn = receivedBgn + convertEurToBgn(receivedEur);
-      const totalBillBgn = billCurrency === 'BGN'
+  const changeResult = useMemo(() => {
+    // Сумираме плащането в лева (BGN + конвертираното EUR)
+    const totalReceivedBgn = receivedBgn + convertEurToBgn(receivedEur);
+    const totalBillBgn =
+      billCurrency === 'BGN'
         ? billBgn
         : convertEurToBgn(parseCurrencyString(bill));
-      
-      return calculateChange(totalReceivedBgn, totalBillBgn);
-    },
-    [receivedBgn, receivedEur, billBgn, billCurrency, bill]
-  );
+
+    return calculateChange(totalReceivedBgn, totalBillBgn);
+  }, [receivedBgn, receivedEur, billBgn, billCurrency, bill]);
 
   useEffect(() => {
     if (!changeResult.isValid && changeResult.error) {
@@ -176,23 +212,17 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
     }
   }, [bill]);
 
-  const handleReceivedBgnQuickAmount = useCallback(
-    (amount: number) => {
-      const formatted = formatAmount(amount);
-      setReceivedBgnText(formatted);
-      setReceivedBgn(amount);
-    },
-    []
-  );
+  const handleReceivedBgnQuickAmount = useCallback((amount: number) => {
+    const formatted = formatAmount(amount);
+    setReceivedBgnText(formatted);
+    setReceivedBgn(amount);
+  }, []);
 
-  const handleReceivedEurQuickAmount = useCallback(
-    (amount: number) => {
-      const formatted = formatAmount(amount);
-      setReceivedEurText(formatted);
-      setReceivedEur(amount);
-    },
-    []
-  );
+  const handleReceivedEurQuickAmount = useCallback((amount: number) => {
+    const formatted = formatAmount(amount);
+    setReceivedEurText(formatted);
+    setReceivedEur(amount);
+  }, []);
 
   const handleBillQuickAmount = useCallback(
     (amount: number) => {
@@ -206,7 +236,6 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
     },
     [billCurrency]
   );
-
 
   const handleBillCurrencySwitch = useCallback(() => {
     const newCurrency = billCurrency === 'BGN' ? 'EUR' : 'BGN';
@@ -310,48 +339,65 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
             <Text style={[styles.inputLabel, memoizedDynamicStyles.text]}>
               {t('calc.bill')}
             </Text>
+            <Text
+              style={[styles.inputHint, memoizedDynamicStyles.secondaryText]}
+            >
+              {t('calc.billHint')}
+            </Text>
             <View style={styles.inputWrapper}>
-                <TextInput
-                  ref={billInputRef}
-                  style={[
-                    styles.input,
-                    memoizedDynamicStyles.input,
-                    billFocused && styles.inputFocused,
-                  ]}
-                  value={bill}
-                  onChangeText={handleBillChange}
-                  onFocus={() => setBillFocused(true)}
-                  onBlur={handleBillBlur}
-                  placeholder="0.00"
-                  placeholderTextColor="#9CA3AF"
-                  keyboardType="numeric"
-                />
-              <TouchableOpacity
+              <TextInput
+                ref={billInputRef}
                 style={[
-                  styles.currencyButtonInField,
-                  memoizedDynamicStyles.currencyButtonInField,
+                  styles.input,
+                  memoizedDynamicStyles.input,
+                  billFocused && styles.inputFocused,
                 ]}
-                onPress={handleBillCurrencySwitch}
-                activeOpacity={0.7}
+                value={bill}
+                onChangeText={handleBillChange}
+                onFocus={() => setBillFocused(true)}
+                onBlur={handleBillBlur}
+                placeholder="0.00"
+                placeholderTextColor="#9CA3AF"
+                keyboardType="numeric"
+              />
+              <Animated.View
+                style={[
+                  styles.currencyButtonAnimatedWrapper,
+                  {
+                    transform: [
+                      { translateY: -18 },
+                      { scale: currencyButtonPulse },
+                    ],
+                  },
+                ]}
               >
-                <Text
+                <TouchableOpacity
                   style={[
-                    styles.currencyButtonInFieldText,
-                    memoizedDynamicStyles.text,
+                    styles.currencyButtonInField,
+                    memoizedDynamicStyles.currencyButtonInField,
                   ]}
+                  onPress={handleBillCurrencySwitch}
+                  activeOpacity={0.7}
                 >
-                  {billCurrency === 'BGN' ? '🇧🇬' : '🇪🇺'}{' '}
-                  {billCurrency === 'BGN'
-                    ? t('currency.lv')
-                    : t('currency.euro')}
-                </Text>
-                <Ionicons
-                  name="swap-horizontal"
-                  size={16}
-                  color={isDark ? '#9CA3AF' : '#6B7280'}
-                  style={styles.currencyButtonIcon}
-                />
-              </TouchableOpacity>
+                  <Text
+                    style={[
+                      styles.currencyButtonInFieldText,
+                      memoizedDynamicStyles.text,
+                    ]}
+                  >
+                    {billCurrency === 'BGN' ? '🇧🇬' : '🇪🇺'}{' '}
+                    {billCurrency === 'BGN'
+                      ? t('currency.lv')
+                      : t('currency.euro')}
+                  </Text>
+                  <Ionicons
+                    name="swap-horizontal"
+                    size={16}
+                    color={isDark ? '#9CA3AF' : '#6B7280'}
+                    style={styles.currencyButtonIcon}
+                  />
+                </TouchableOpacity>
+              </Animated.View>
             </View>
             <QuickAmounts
               amounts={[5, 10, 20, 50, 100]}
@@ -365,6 +411,11 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
           <View style={styles.inputGroup}>
             <Text style={[styles.inputLabel, memoizedDynamicStyles.text]}>
               {t('calc.received')}
+            </Text>
+            <Text
+              style={[styles.inputHint, memoizedDynamicStyles.secondaryText]}
+            >
+              {t('calc.receivedHint')}
             </Text>
             <View style={styles.combinedInputContainer}>
               <View style={styles.combinedInputWrapper}>
