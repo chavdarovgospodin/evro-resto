@@ -62,9 +62,7 @@ export function ChangeDisplayV3({
       <View style={styles.content}>
         <View style={styles.warningContainer}>
           <Ionicons name="warning" size={16} color="#92400E" />
-          <Text style={styles.warningText}>
-            {t.euroWarning}
-          </Text>
+          <Text style={styles.warningText}>{t.euroWarning}</Text>
         </View>
 
         <Text style={[styles.header, { color: colors.secondaryText }]}>
@@ -77,10 +75,12 @@ export function ChangeDisplayV3({
             <Text style={styles.flag}>🇪🇺</Text>
           </View>
           <View style={styles.amountContent}>
-            <Text style={[styles.amount, { color: colors.text }]}>
+            <Text style={[styles.amountEuro, { color: colors.text }]}>
               {formatAmount(changeEur)}
             </Text>
-            <Text style={[styles.currencyLabel, { color: colors.secondaryText }]}>
+            <Text
+              style={[styles.currencyLabel, { color: colors.secondaryText }]}
+            >
               {t.euro}
             </Text>
           </View>
@@ -88,11 +88,15 @@ export function ChangeDisplayV3({
 
         {/* Разделител */}
         <View style={styles.separator}>
-          <View style={[styles.separatorLine, { backgroundColor: colors.border }]} />
+          <View
+            style={[styles.separatorLine, { backgroundColor: colors.border }]}
+          />
           <Text style={[styles.separatorText, { color: colors.secondaryText }]}>
             {t.or}
           </Text>
-          <View style={[styles.separatorLine, { backgroundColor: colors.border }]} />
+          <View
+            style={[styles.separatorLine, { backgroundColor: colors.border }]}
+          />
         </View>
 
         {/* BGN ред */}
@@ -101,15 +105,16 @@ export function ChangeDisplayV3({
             <Text style={styles.flag}>🇧🇬</Text>
           </View>
           <View style={styles.amountContent}>
-            <Text style={[styles.amount, { color: colors.text }]}>
+            <Text style={[styles.amountBgn, { color: colors.text }]}>
               {formatAmount(changeBgn)}
             </Text>
-            <Text style={[styles.currencyLabel, { color: colors.secondaryText }]}>
+            <Text
+              style={[styles.currencyLabel, { color: colors.secondaryText }]}
+            >
               {t.leva}
             </Text>
           </View>
         </View>
-
       </View>
     </Animated.View>
   );
@@ -155,8 +160,12 @@ const styles = StyleSheet.create({
   amountContent: {
     flex: 1,
   },
-  amount: {
-    fontSize: 32,
+  amountEuro: {
+    fontSize: 36,
+    fontWeight: '700',
+  },
+  amountBgn: {
+    fontSize: 24,
     fontWeight: '700',
   },
   currencyLabel: {

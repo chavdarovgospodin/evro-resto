@@ -488,7 +488,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                   {t('currency.lv')}
                 </Text>
                 <QuickAmounts
-                  amounts={[5, 10, 20, 50, 100]}
+                  amounts={[5, 10, 20, 50]}
                   onSelect={handleReceivedBgnQuickAmount}
                   currency="BGN"
                   isDark={isDark}
@@ -506,7 +506,7 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                   {t('currency.euro')}
                 </Text>
                 <QuickAmounts
-                  amounts={[5, 10, 20, 50, 100]}
+                  amounts={[5, 10, 20, 50]}
                   onSelect={handleReceivedEurQuickAmount}
                   currency="EUR"
                   isDark={isDark}

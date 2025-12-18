@@ -200,7 +200,7 @@ export const calculatorStyles = StyleSheet.create({
   },
   quickAmountsRow: {
     flexDirection: 'row',
-    gap: 12,
+    gap: 8,
     marginTop: 8,
   },
   quickAmountsColumn: {

@@ -60,7 +60,7 @@ export function PaymentOptionsDemo() {
       {/* Вариант 1: Бутон "+ Добави валута" */}
       <View style={getVariantContainerStyle()}>
         <Text style={[demoStyles.variantTitle, memoizedDynamicStyles.text]}>
-          Вариант 1: Бутон "+ Добави валута"
+          {t('demo.variant1')}
         </Text>
         <View style={demoStyles.inputGroup}>
           <Text style={[demoStyles.label, memoizedDynamicStyles.text]}>
@@ -74,7 +74,7 @@ export function PaymentOptionsDemo() {
               ]}
               value={variant1First}
               onChangeText={setVariant1First}
-              placeholder="0.00"
+              placeholder={t('demo.placeholder')}
               placeholderTextColor="#9CA3AF"
               keyboardType="numeric"
             />
@@ -99,7 +99,7 @@ export function PaymentOptionsDemo() {
                   ]}
                   value={variant1Second}
                   onChangeText={setVariant1Second}
-                  placeholder="0.00"
+                  placeholder={t('demo.placeholder')}
                   placeholderTextColor="#9CA3AF"
                   keyboardType="numeric"
                 />
@@ -130,7 +130,7 @@ export function PaymentOptionsDemo() {
             >
               <Ionicons name="add-circle-outline" size={20} color={isDark ? '#A78BFA' : '#7C3AED'} />
               <Text style={[demoStyles.addButtonText, { color: isDark ? '#A78BFA' : '#7C3AED' }]}>
-                Добави валута
+                {t('demo.addCurrency')}
               </Text>
             </TouchableOpacity>
           )}
@@ -140,7 +140,7 @@ export function PaymentOptionsDemo() {
       {/* Вариант 2: Две полета по подразбиране */}
       <View style={getVariantContainerStyle()}>
         <Text style={[demoStyles.variantTitle, memoizedDynamicStyles.text]}>
-          Вариант 2: Две полета по подразбиране
+          {t('demo.variant2')}
         </Text>
         <View style={demoStyles.inputGroup}>
           <Text style={[demoStyles.label, memoizedDynamicStyles.text]}>
@@ -154,7 +154,7 @@ export function PaymentOptionsDemo() {
               ]}
               value={variant2First}
               onChangeText={setVariant2First}
-              placeholder="0.00"
+              placeholder={t('demo.placeholder')}
               placeholderTextColor="#9CA3AF"
               keyboardType="numeric"
             />
@@ -171,7 +171,7 @@ export function PaymentOptionsDemo() {
         </View>
         <View style={demoStyles.inputGroup}>
           <Text style={[demoStyles.label, memoizedDynamicStyles.text]}>
-            {t('calc.received')} 2 (опционално)
+            {t('demo.receivedOptional')}
           </Text>
           <View style={demoStyles.inputWrapper}>
             <TextInput
@@ -181,7 +181,7 @@ export function PaymentOptionsDemo() {
               ]}
               value={variant2Second}
               onChangeText={setVariant2Second}
-              placeholder="0.00 (опционално)"
+              placeholder={t('demo.placeholderOptional')}
               placeholderTextColor="#9CA3AF"
               keyboardType="numeric"
             />
@@ -202,7 +202,7 @@ export function PaymentOptionsDemo() {
       <View style={getVariantContainerStyle()}>
         <View style={demoStyles.splitHeader}>
           <Text style={[demoStyles.variantTitle, memoizedDynamicStyles.text]}>
-            Вариант 3: Split Payment режим
+            {t('demo.variant3')}
           </Text>
           <TouchableOpacity
             style={[
@@ -223,7 +223,7 @@ export function PaymentOptionsDemo() {
                 { color: variant3SplitMode ? '#10B981' : (isDark ? '#9CA3AF' : '#6B7280') },
               ]}
             >
-              Split Payment
+              {t('demo.splitPayment')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -239,7 +239,7 @@ export function PaymentOptionsDemo() {
               ]}
               value={variant3First}
               onChangeText={setVariant3First}
-              placeholder="0.00"
+              placeholder={t('demo.placeholder')}
               placeholderTextColor="#9CA3AF"
               keyboardType="numeric"
             />
@@ -262,7 +262,7 @@ export function PaymentOptionsDemo() {
                 ]}
                 value={variant3Second}
                 onChangeText={setVariant3Second}
-                placeholder="0.00"
+                placeholder={t('demo.placeholder')}
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
               />
@@ -283,7 +283,7 @@ export function PaymentOptionsDemo() {
       {/* Вариант 4: Комбинирано поле */}
       <View style={getVariantContainerStyle()}>
         <Text style={[demoStyles.variantTitle, memoizedDynamicStyles.text]}>
-          Вариант 4: Комбинирано поле
+          {t('demo.variant4')}
         </Text>
         <View style={demoStyles.inputGroup}>
           <Text style={[demoStyles.label, memoizedDynamicStyles.text]}>
@@ -298,7 +298,7 @@ export function PaymentOptionsDemo() {
                 ]}
                 value={variant4Bgn}
                 onChangeText={setVariant4Bgn}
-                placeholder="0.00"
+                placeholder={t('demo.placeholder')}
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
               />
@@ -317,7 +317,7 @@ export function PaymentOptionsDemo() {
                 ]}
                 value={variant4Eur}
                 onChangeText={setVariant4Eur}
-                placeholder="0.00"
+                placeholder={t('demo.placeholder')}
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
               />

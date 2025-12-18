@@ -1,21 +1,24 @@
 import type { LanguageType } from '../types';
 
-export const changeDisplayTranslations: Record<LanguageType, {
-  headerLabel: string;
-  or: string;
-  leva: string;
-  euro: string;
-  breakdownIn: string;
-  showIn: string;
-  noChange: string;
-  warning: string;
-  stotinki: string;
-  cents: string;
-  lv: string;
-  euroSymbol: string;
-  info: string;
-  euroWarning: string;
-}> = {
+export const changeDisplayTranslations: Record<
+  LanguageType,
+  {
+    headerLabel: string;
+    or: string;
+    leva: string;
+    euro: string;
+    breakdownIn: string;
+    showIn: string;
+    noChange: string;
+    warning: string;
+    stotinki: string;
+    cents: string;
+    lv: string;
+    euroSymbol: string;
+    info: string;
+    euroWarning: string;
+  }
+> = {
   bg: {
     headerLabel: 'За връщане:',
     or: 'равно на',
@@ -49,4 +52,3 @@ export const changeDisplayTranslations: Record<LanguageType, {
     euroWarning: 'From January 1, 2026, change must be returned only in euros!',
   },
 };
-

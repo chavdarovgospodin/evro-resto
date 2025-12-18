@@ -9,7 +9,10 @@ import {
   Animated,
   Platform,
 } from 'react-native';
-import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import {
+  SafeAreaView,
+  useSafeAreaInsets,
+} from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { triggerHapticLight, triggerHapticMedium } from '../utils/haptics';
 import { useApp } from '../context/AppContext';
@@ -30,29 +33,25 @@ export function Onboarding({ onComplete, onSkip }: OnboardingProps) {
 
   const pages = [
     {
-      title: 'Добре дошли в Евро Ресто! 🇧🇬🇪🇺',
-      subtitle: 'Най-лесният начин за изчисляване на ресто при преминаването към евро',
+      title: t('tutorial.welcomeTitle'),
+      subtitle: t('tutorial.welcomeSubtitle'),
       icon: '💰',
-      buttonText: 'Напред',
+      buttonText: t('tutorial.next'),
     },
     {
-      title: 'Как работи?',
-      steps: [
-        '1️⃣ Въведете сумата на сметката (в лева или евро)',
-        '2️⃣ Въведете с колко плаща клиентът (може в лева, евро или комбинирано)',
-        '3️⃣ Рестото се изчислява и показва автоматично в двете валути!',
-      ],
-      buttonText: 'Напред',
+      title: t('tutorial.howItWorksTitle'),
+      steps: [t('tutorial.step1'), t('tutorial.step2'), t('tutorial.step3')],
+      buttonText: t('tutorial.next'),
     },
     {
-      title: 'Специални функции',
+      title: t('tutorial.specialFeaturesTitle'),
       features: [
-        '✨ Смесено плащане (лева + евро)',
-        '🔄 Ресто в двете валути',
-        '📱 Работи без интернет',
-        '🇪🇺 Официален курс 1.95583',
+        t('tutorial.feature1'),
+        t('tutorial.feature2'),
+        t('tutorial.feature3'),
+        t('tutorial.feature4'),
       ],
-      buttonText: 'Започни',
+      buttonText: t('tutorial.start'),
     },
   ];
 
@@ -94,23 +93,37 @@ export function Onboarding({ onComplete, onSkip }: OnboardingProps) {
     onSkip();
   };
 
-  const renderPage = (page: typeof pages[0], index: number) => {
+  const renderPage = (page: (typeof pages)[0], index: number) => {
     const isDarkMode = isDark;
-    const bgColor = isDarkMode ? 'rgba(31, 41, 55, 0.98)' : 'rgba(255, 255, 255, 0.98)';
+    const bgColor = isDarkMode
+      ? 'rgba(31, 41, 55, 0.98)'
+      : 'rgba(255, 255, 255, 0.98)';
     const textColor = isDarkMode ? '#FFFFFF' : '#1F2937';
     const secondaryTextColor = isDarkMode ? '#9CA3AF' : '#6B7280';
 
     return (
-      <View key={index} style={[styles.page, { width: SCREEN_WIDTH, backgroundColor: bgColor }]}>
+      <View
+        key={index}
+        style={[styles.page, { width: SCREEN_WIDTH, backgroundColor: bgColor }]}
+      >
         <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
           {/* Skip Button */}
           <View style={[styles.skipButtonContainer, { top: insets.top + 10 }]}>
             <TouchableOpacity
-              style={[styles.skipButton, { backgroundColor: isDarkMode ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)' }]}
+              style={[
+                styles.skipButton,
+                {
+                  backgroundColor: isDarkMode
+                    ? 'rgba(255, 255, 255, 0.1)'
+                    : 'rgba(0, 0, 0, 0.05)',
+                },
+              ]}
               onPress={handleSkip}
               activeOpacity={0.7}
             >
-              <Text style={[styles.skipText, { color: textColor }]}>Пропусни</Text>
+              <Text style={[styles.skipText, { color: textColor }]}>
+                {t('tutorial.skip')}
+              </Text>
             </TouchableOpacity>
           </View>
 
@@ -123,7 +136,9 @@ export function Onboarding({ onComplete, onSkip }: OnboardingProps) {
             )}
 
             {/* Title */}
-            <Text style={[styles.title, { color: textColor }]}>{page.title}</Text>
+            <Text style={[styles.title, { color: textColor }]}>
+              {page.title}
+            </Text>
 
             {/* Subtitle for first page */}
             {page.subtitle && (
@@ -137,7 +152,9 @@ export function Onboarding({ onComplete, onSkip }: OnboardingProps) {
               <View style={styles.stepsContainer}>
                 {page.steps.map((step, stepIndex) => (
                   <View key={stepIndex} style={styles.stepItem}>
-                    <Text style={[styles.stepText, { color: textColor }]}>{step}</Text>
+                    <Text style={[styles.stepText, { color: textColor }]}>
+                      {step}
+                    </Text>
                   </View>
                 ))}
               </View>
@@ -148,7 +165,9 @@ export function Onboarding({ onComplete, onSkip }: OnboardingProps) {
               <View style={styles.featuresContainer}>
                 {page.features.map((feature, featureIndex) => (
                   <View key={featureIndex} style={styles.featureItem}>
-                    <Text style={[styles.featureText, { color: textColor }]}>{feature}</Text>
+                    <Text style={[styles.featureText, { color: textColor }]}>
+                      {feature}
+                    </Text>
                   </View>
                 ))}
               </View>
@@ -212,7 +231,8 @@ export function Onboarding({ onComplete, onSkip }: OnboardingProps) {
                 {
                   width: dotWidth,
                   opacity: dotOpacity,
-                  backgroundColor: currentPage === index ? '#9333ea' : '#9CA3AF',
+                  backgroundColor:
+                    currentPage === index ? '#9333ea' : '#9CA3AF',
                 },
               ]}
             />
@@ -353,4 +373,3 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
 });
-

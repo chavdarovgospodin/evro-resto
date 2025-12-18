@@ -24,11 +24,12 @@ export const quickAmountsStyles = StyleSheet.create({
   },
   amountButtonSmall: {
     flex: 1,
-    marginHorizontal: 3,
+    marginHorizontal: 2,
     paddingVertical: 8,
     borderRadius: 10,
     alignItems: 'center',
     borderWidth: 1,
+    minWidth: 40,
   },
   amountButtonPressed: {
     backgroundColor: '#7C3AED',

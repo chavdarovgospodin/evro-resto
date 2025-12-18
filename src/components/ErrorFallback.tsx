@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useApp } from '../context/AppContext';
 
 interface ErrorFallbackProps {
   error: Error;
@@ -8,13 +9,15 @@ interface ErrorFallbackProps {
 }
 
 export function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps) {
+  const { t } = useApp();
+
   return (
     <View style={styles.container}>
       <View style={styles.content}>
         <Ionicons name="warning-outline" size={64} color="#EF4444" />
-        <Text style={styles.title}>Нещо се обърка</Text>
+        <Text style={styles.title}>{t('error.title')}</Text>
         <Text style={styles.message}>
-          Възникна неочаквана грешка. Моля, опитайте отново.
+          {t('error.message')}
         </Text>
         {__DEV__ && (
           <View style={styles.errorDetails}>
@@ -27,7 +30,7 @@ export function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps)
           activeOpacity={0.7}
         >
           <Ionicons name="refresh" size={20} color="#FFFFFF" />
-          <Text style={styles.buttonText}>Опитай отново</Text>
+          <Text style={styles.buttonText}>{t('error.retry')}</Text>
         </TouchableOpacity>
       </View>
     </View>
