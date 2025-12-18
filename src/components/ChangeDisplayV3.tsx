@@ -60,6 +60,13 @@ export function ChangeDisplayV3({
       <View style={[styles.accentLine, { backgroundColor: colors.accent }]} />
 
       <View style={styles.content}>
+        <View style={styles.warningContainer}>
+          <Ionicons name="warning" size={16} color="#92400E" />
+          <Text style={styles.warningText}>
+            {t.euroWarning}
+          </Text>
+        </View>
+
         <Text style={[styles.header, { color: colors.secondaryText }]}>
           Ресто:
         </Text>
@@ -171,5 +178,23 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '500',
     marginHorizontal: 12,
+  },
+  warningContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FEF3C7',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#F59E0B',
+  },
+  warningText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#92400E',
+    marginLeft: 8,
+    flex: 1,
   },
 });

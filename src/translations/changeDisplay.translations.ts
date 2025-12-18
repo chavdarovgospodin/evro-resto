@@ -14,10 +14,11 @@ export const changeDisplayTranslations: Record<LanguageType, {
   lv: string;
   euroSymbol: string;
   info: string;
+  euroWarning: string;
 }> = {
   bg: {
     headerLabel: 'За връщане:',
-    or: 'или',
+    or: 'равно на',
     leva: 'лева',
     euro: 'евро',
     breakdownIn: 'Разбивка в',
@@ -29,10 +30,11 @@ export const changeDisplayTranslations: Record<LanguageType, {
     lv: 'лв',
     euroSymbol: '€',
     info: 'Рестото се изчислява автоматично',
+    euroWarning: 'От 1 януари 2026 рестото се връща само в евро!',
   },
   en: {
     headerLabel: 'Change:',
-    or: 'or',
+    or: 'equal to',
     leva: 'leva',
     euro: 'euro',
     breakdownIn: 'Breakdown in',
@@ -44,6 +46,7 @@ export const changeDisplayTranslations: Record<LanguageType, {
     lv: 'lv',
     euroSymbol: '€',
     info: 'Change is calculated automatically',
+    euroWarning: 'From January 1, 2026, change must be returned only in euros!',
   },
 };
 
