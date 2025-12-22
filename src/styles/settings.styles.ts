@@ -3,13 +3,16 @@ import { StyleSheet } from 'react-native';
 export const settingsStyles = StyleSheet.create({
   container: {
     flex: 1,
+    maxWidth: '100%',
   },
   scrollView: {
     flex: 1,
+    maxWidth: '100%',
   },
   scrollContent: {
     paddingHorizontal: 20,
     paddingBottom: 40,
+    maxWidth: '100%',
   },
   header: {
     marginBottom: 32,
@@ -32,10 +35,12 @@ export const settingsStyles = StyleSheet.create({
   optionsRow: {
     flexDirection: 'row',
     gap: 12,
+    maxWidth: '100%',
   },
   optionsRowThree: {
     flexDirection: 'row',
     gap: 8,
+    maxWidth: '100%',
   },
   option: {
     flex: 1,

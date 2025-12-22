@@ -308,6 +308,8 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                 styles.exchangeRateText,
                 memoizedDynamicStyles.secondaryText,
               ]}
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
             >
               {t('calc.exchangeRate')}
             </Text>
@@ -331,16 +333,25 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
         </View>
 
         <View style={styles.header}>
-          <Text style={styles.title}>{t('app.subtitle')}</Text>
+          <Text style={styles.title} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
+            {t('app.subtitle')}
+          </Text>
         </View>
 
         <View style={styles.inputsContainer}>
           <View style={styles.inputGroup}>
-            <Text style={[styles.inputLabel, memoizedDynamicStyles.text]}>
+            <Text
+              style={[styles.inputLabel, memoizedDynamicStyles.text]}
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
+            >
               {t('calc.bill')}
             </Text>
             <Text
               style={[styles.inputHint, memoizedDynamicStyles.secondaryText]}
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
             >
               {t('calc.billHint')}
             </Text>
@@ -359,6 +370,8 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                 placeholder="0.00"
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
+                allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
               />
               <Animated.View
                 style={[
@@ -384,6 +397,8 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                       styles.currencyButtonInFieldText,
                       memoizedDynamicStyles.text,
                     ]}
+                    allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
                   >
                     {billCurrency === 'BGN' ? '🇧🇬' : '🇪🇺'}{' '}
                     {billCurrency === 'BGN'
@@ -409,11 +424,17 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
           </View>
 
           <View style={styles.inputGroup}>
-            <Text style={[styles.inputLabel, memoizedDynamicStyles.text]}>
+            <Text
+              style={[styles.inputLabel, memoizedDynamicStyles.text]}
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
+            >
               {t('calc.received')}
             </Text>
             <Text
               style={[styles.inputHint, memoizedDynamicStyles.secondaryText]}
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
             >
               {t('calc.receivedHint')}
             </Text>
@@ -433,12 +454,16 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                   placeholder="0.00"
                   placeholderTextColor="#9CA3AF"
                   keyboardType="numeric"
+                  allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
                 />
                 <Text
                   style={[
                     styles.combinedCurrency,
                     memoizedDynamicStyles.secondaryText,
                   ]}
+                  allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
                 >
                   🇧🇬 {t('currency.lv')}
                 </Text>
@@ -448,6 +473,8 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                   styles.combinedSeparator,
                   memoizedDynamicStyles.secondaryText,
                 ]}
+                allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
               >
                 +
               </Text>
@@ -466,12 +493,16 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                   placeholder="0.00"
                   placeholderTextColor="#9CA3AF"
                   keyboardType="numeric"
+                  allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
                 />
                 <Text
                   style={[
                     styles.combinedCurrency,
                     memoizedDynamicStyles.secondaryText,
                   ]}
+                  allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
                 >
                   🇪🇺 {t('currency.euro')}
                 </Text>
@@ -484,6 +515,8 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                     styles.quickAmountsLabel,
                     memoizedDynamicStyles.secondaryText,
                   ]}
+                  allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
                 >
                   {t('currency.lv')}
                 </Text>
@@ -502,6 +535,8 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                     styles.quickAmountsLabel,
                     memoizedDynamicStyles.secondaryText,
                   ]}
+                  allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
                 >
                   {t('currency.euro')}
                 </Text>
@@ -525,7 +560,10 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                 color="#EF4444"
                 style={styles.errorIcon}
               />
-              <Text style={styles.errorText}>{error}</Text>
+              <Text style={styles.errorText} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
+                {error}
+              </Text>
             </View>
           )}
 
@@ -547,7 +585,13 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                   isDark && styles.noChangeContainerDark,
                 ]}
               >
-                <Text style={styles.noChangeText}>{t('change.noChange')}</Text>
+                <Text
+                  style={styles.noChangeText}
+                  allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
+                >
+                  {t('change.noChange')}
+                </Text>
               </View>
             ))}
 
@@ -571,6 +615,8 @@ export function Calculator({ onOpenSettings }: CalculatorProps) {
                   ? styles.clearButtonTextEnabled
                   : styles.clearButtonTextDisabled,
               ]}
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
             >
               {t('calc.clear')}
             </Text>

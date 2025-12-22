@@ -62,24 +62,30 @@ export function ChangeDisplayV3({
       <View style={styles.content}>
         <View style={styles.warningContainer}>
           <Ionicons name="warning" size={16} color="#92400E" />
-          <Text style={styles.warningText}>{t.euroWarning}</Text>
+          <Text style={styles.warningText} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>{t.euroWarning}</Text>
         </View>
 
-        <Text style={[styles.header, { color: colors.secondaryText }]}>
+        <Text style={[styles.header, { color: colors.secondaryText }]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
           Ресто:
         </Text>
 
         {/* EUR ред */}
         <View style={styles.amountRow}>
           <View style={styles.flagContainer}>
-            <Text style={styles.flag}>🇪🇺</Text>
+            <Text style={styles.flag} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>🇪🇺</Text>
           </View>
           <View style={styles.amountContent}>
-            <Text style={[styles.amountEuro, { color: colors.text }]}>
+            <Text style={[styles.amountEuro, { color: colors.text }]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
               {formatAmount(changeEur)}
             </Text>
             <Text
               style={[styles.currencyLabel, { color: colors.secondaryText }]}
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
             >
               {t.euro}
             </Text>
@@ -91,7 +97,8 @@ export function ChangeDisplayV3({
           <View
             style={[styles.separatorLine, { backgroundColor: colors.border }]}
           />
-          <Text style={[styles.separatorText, { color: colors.secondaryText }]}>
+          <Text style={[styles.separatorText, { color: colors.secondaryText }]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
             {t.or}
           </Text>
           <View
@@ -102,14 +109,18 @@ export function ChangeDisplayV3({
         {/* BGN ред */}
         <View style={styles.amountRow}>
           <View style={styles.flagContainer}>
-            <Text style={styles.flag}>🇧🇬</Text>
+            <Text style={styles.flag} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>🇧🇬</Text>
           </View>
           <View style={styles.amountContent}>
-            <Text style={[styles.amountBgn, { color: colors.text }]}>
+            <Text style={[styles.amountBgn, { color: colors.text }]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
               {formatAmount(changeBgn)}
             </Text>
             <Text
               style={[styles.currencyLabel, { color: colors.secondaryText }]}
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
             >
               {t.leva}
             </Text>
@@ -127,6 +138,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     flexDirection: 'row',
     overflow: 'hidden',
+    maxWidth: '100%',
   },
   accentLine: {
     width: 5,
@@ -134,6 +146,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     padding: 20,
+    maxWidth: '100%',
   },
   header: {
     fontSize: 12,
@@ -159,6 +172,8 @@ const styles = StyleSheet.create({
   },
   amountContent: {
     flex: 1,
+    maxWidth: '100%',
+    overflow: 'hidden',
   },
   amountEuro: {
     fontSize: 36,

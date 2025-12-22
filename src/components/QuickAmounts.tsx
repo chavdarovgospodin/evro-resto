@@ -43,14 +43,23 @@ export function QuickAmounts({
     [currency, t]
   );
 
-  const buttonStyle = size === 'small' ? styles.amountButtonSmall : styles.amountButton;
-  const textStyle = size === 'small' ? styles.amountTextSmall : styles.amountText;
-  const currencyTextStyle = size === 'small' ? styles.currencyTextSmall : styles.currencyText;
+  const buttonStyle =
+    size === 'small' ? styles.amountButtonSmall : styles.amountButton;
+  const textStyle =
+    size === 'small' ? styles.amountTextSmall : styles.amountText;
+  const currencyTextStyle =
+    size === 'small' ? styles.currencyTextSmall : styles.currencyText;
 
   return (
     <View style={styles.container}>
       {size === 'normal' && (
-        <Text style={[styles.title, dynamicStyles.title]}>{t.title}</Text>
+        <Text
+          style={[styles.title, dynamicStyles.title]}
+          allowFontScaling={true}
+          maxFontSizeMultiplier={1.1}
+        >
+          {t.title}
+        </Text>
       )}
       <View style={styles.buttonContainer}>
         {amounts.map((amount, index) => (
@@ -72,6 +81,8 @@ export function QuickAmounts({
                   ? styles.amountTextPressed
                   : dynamicStyles.textNormal,
               ]}
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
             >
               {amount}
             </Text>
@@ -82,6 +93,8 @@ export function QuickAmounts({
                   ? styles.currencyTextPressed
                   : dynamicStyles.currencyNormal,
               ]}
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
             >
               {currencySymbol}
             </Text>

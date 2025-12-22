@@ -78,7 +78,8 @@ export function ChangeDisplay({
               color="#10B981"
               style={{ marginRight: 8 }}
             />
-            <Text style={styles.noChangeText}>{t.noChange}</Text>
+            <Text style={styles.noChangeText} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>{t.noChange}</Text>
           </View>
         </View>
       </Animated.View>
@@ -88,33 +89,41 @@ export function ChangeDisplay({
   return (
     <Animated.View style={{ opacity: fadeAnim }}>
       <View style={[styles.container, dynamicStyles.container]}>
-        <Text style={[styles.headerLabel, dynamicStyles.headerLabel]}>
+        <Text style={[styles.headerLabel, dynamicStyles.headerLabel]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
           {t.headerLabel}
         </Text>
 
         <View style={styles.currencyRow}>
           <View style={[styles.currencyBox, dynamicStyles.currencyBox]}>
-            <Text style={styles.currencyFlag}>🇧🇬</Text>
-            <Text style={[styles.currencyAmount, dynamicStyles.currencyAmount]}>
+            <Text style={styles.currencyFlag} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>🇧🇬</Text>
+            <Text style={[styles.currencyAmount, dynamicStyles.currencyAmount]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
               {formatAmount(changeBgn)}
             </Text>
-            <Text style={[styles.currencyLabel, dynamicStyles.currencyLabel]}>
+            <Text style={[styles.currencyLabel, dynamicStyles.currencyLabel]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
               {t.leva}
             </Text>
           </View>
 
           <View style={styles.divider}>
-            <Text style={[styles.dividerText, dynamicStyles.dividerText]}>
+            <Text style={[styles.dividerText, dynamicStyles.dividerText]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
               {t.or}
             </Text>
           </View>
 
           <View style={[styles.currencyBox, dynamicStyles.currencyBox]}>
-            <Text style={styles.currencyFlag}>🇪🇺</Text>
-            <Text style={[styles.currencyAmount, dynamicStyles.currencyAmount]}>
+            <Text style={styles.currencyFlag} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>🇪🇺</Text>
+            <Text style={[styles.currencyAmount, dynamicStyles.currencyAmount]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
               {formatAmount(changeEur)}
             </Text>
-            <Text style={[styles.currencyLabel, dynamicStyles.currencyLabel]}>
+            <Text style={[styles.currencyLabel, dynamicStyles.currencyLabel]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
               {t.euro}
             </Text>
           </View>
@@ -162,7 +171,8 @@ export function ChangeDisplay({
                       style={styles.denominationIcon}
                     />
                   ) : (
-                    <Text style={styles.denominationIcon}>🪙</Text>
+                    <Text style={styles.denominationIcon} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>🪙</Text>
                   )}
                   <Text
                     style={[
@@ -200,7 +210,8 @@ export function ChangeDisplay({
               color="#EF4444"
               style={{ marginRight: 6 }}
             />
-            <Text style={styles.warningText}>{t.warning}</Text>
+            <Text style={styles.warningText} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>{t.warning}</Text>
           </View>
         )}
       </View>

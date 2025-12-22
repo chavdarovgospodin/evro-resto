@@ -15,13 +15,16 @@ export function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps)
     <View style={styles.container}>
       <View style={styles.content}>
         <Ionicons name="warning-outline" size={64} color="#EF4444" />
-        <Text style={styles.title}>{t('error.title')}</Text>
-        <Text style={styles.message}>
+        <Text style={styles.title} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>{t('error.title')}</Text>
+        <Text style={styles.message} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
           {t('error.message')}
         </Text>
         {__DEV__ && (
           <View style={styles.errorDetails}>
-            <Text style={styles.errorText}>{error.message}</Text>
+            <Text style={styles.errorText} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>{error.message}</Text>
           </View>
         )}
         <TouchableOpacity
@@ -30,7 +33,8 @@ export function ErrorFallback({ error, resetErrorBoundary }: ErrorFallbackProps)
           activeOpacity={0.7}
         >
           <Ionicons name="refresh" size={20} color="#FFFFFF" />
-          <Text style={styles.buttonText}>{t('error.retry')}</Text>
+          <Text style={styles.buttonText} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>{t('error.retry')}</Text>
         </TouchableOpacity>
       </View>
     </View>

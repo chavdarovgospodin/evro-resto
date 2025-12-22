@@ -44,13 +44,15 @@ export function Settings() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.header}>
-          <Text style={[styles.title, dynamicStyles.text]}>
+          <Text style={[styles.title, dynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
             {t('settings.title')}
           </Text>
         </View>
 
         <View style={[styles.settingCard, dynamicStyles.card]}>
-          <Text style={[styles.settingLabel, dynamicStyles.text]}>
+          <Text style={[styles.settingLabel, dynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
             {t('settings.currency')}
           </Text>
           <View style={styles.optionsRow}>
@@ -63,7 +65,8 @@ export function Settings() {
               ]}
               onPress={() => handleCurrencyChange('EUR')}
             >
-              <Text style={styles.optionIcon}>🇪🇺</Text>
+              <Text style={styles.optionIcon} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>🇪🇺</Text>
               <Text
                 style={[
                   styles.optionText,
@@ -84,7 +87,8 @@ export function Settings() {
               ]}
               onPress={() => handleCurrencyChange('BGN')}
             >
-              <Text style={styles.optionIcon}>🇧🇬</Text>
+              <Text style={styles.optionIcon} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>🇧🇬</Text>
               <Text
                 style={[
                   styles.optionText,
@@ -100,7 +104,8 @@ export function Settings() {
         </View>
 
         <View style={[styles.settingCard, dynamicStyles.card]}>
-          <Text style={[styles.settingLabel, dynamicStyles.text]}>
+          <Text style={[styles.settingLabel, dynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
             {t('settings.language')}
           </Text>
           <View style={styles.optionsRow}>
@@ -113,7 +118,8 @@ export function Settings() {
               ]}
               onPress={() => handleLanguageChange('bg')}
             >
-              <Text style={styles.optionIcon}>🇧🇬</Text>
+              <Text style={styles.optionIcon} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>🇧🇬</Text>
               <Text
                 style={[
                   styles.optionText,
@@ -134,7 +140,8 @@ export function Settings() {
               ]}
               onPress={() => handleLanguageChange('en')}
             >
-              <Text style={styles.optionIcon}>🇬🇧</Text>
+              <Text style={styles.optionIcon} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>🇬🇧</Text>
               <Text
                 style={[
                   styles.optionText,
@@ -150,7 +157,8 @@ export function Settings() {
         </View>
 
         <View style={[styles.settingCard, dynamicStyles.card]}>
-          <Text style={[styles.settingLabel, dynamicStyles.text]}>
+          <Text style={[styles.settingLabel, dynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
             {t('settings.theme')}
           </Text>
           <View style={styles.optionsRowThree}>
@@ -256,7 +264,8 @@ export function Settings() {
               size={20}
               color={isDark ? '#A78BFA' : '#7C3AED'}
             />
-            <Text style={[styles.tutorialButtonText, dynamicStyles.text]}>
+            <Text style={[styles.tutorialButtonText, dynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
               {t('settings.showTutorial')}
             </Text>
             <Ionicons
@@ -267,7 +276,8 @@ export function Settings() {
           </TouchableOpacity>
         </View>
 
-        <Text style={[styles.versionText, dynamicStyles.secondaryText]}>
+        <Text style={[styles.versionText, dynamicStyles.secondaryText]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
           {t('app.version')}
         </Text>
       </ScrollView>

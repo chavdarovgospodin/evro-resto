@@ -41,16 +41,6 @@ export function Onboarding({ onComplete, onSkip }: OnboardingProps) {
     {
       title: t('tutorial.howItWorksTitle'),
       steps: [t('tutorial.step1'), t('tutorial.step2'), t('tutorial.step3')],
-      buttonText: t('tutorial.next'),
-    },
-    {
-      title: t('tutorial.specialFeaturesTitle'),
-      features: [
-        t('tutorial.feature1'),
-        t('tutorial.feature2'),
-        t('tutorial.feature3'),
-        t('tutorial.feature4'),
-      ],
       buttonText: t('tutorial.start'),
     },
   ];
@@ -121,7 +111,8 @@ export function Onboarding({ onComplete, onSkip }: OnboardingProps) {
               onPress={handleSkip}
               activeOpacity={0.7}
             >
-              <Text style={[styles.skipText, { color: textColor }]}>
+              <Text style={[styles.skipText, { color: textColor }]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                 {t('tutorial.skip')}
               </Text>
             </TouchableOpacity>
@@ -131,18 +122,21 @@ export function Onboarding({ onComplete, onSkip }: OnboardingProps) {
             {/* Icon/Animation for first page */}
             {index === 0 && (
               <View style={styles.iconContainer}>
-                <Text style={styles.largeIcon}>🇪🇺</Text>
+                <Text style={styles.largeIcon} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>🇪🇺</Text>
               </View>
             )}
 
             {/* Title */}
-            <Text style={[styles.title, { color: textColor }]}>
+            <Text style={[styles.title, { color: textColor }]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
               {page.title}
             </Text>
 
             {/* Subtitle for first page */}
             {page.subtitle && (
-              <Text style={[styles.subtitle, { color: secondaryTextColor }]}>
+              <Text style={[styles.subtitle, { color: secondaryTextColor }]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                 {page.subtitle}
               </Text>
             )}
@@ -152,7 +146,8 @@ export function Onboarding({ onComplete, onSkip }: OnboardingProps) {
               <View style={styles.stepsContainer}>
                 {page.steps.map((step, stepIndex) => (
                   <View key={stepIndex} style={styles.stepItem}>
-                    <Text style={[styles.stepText, { color: textColor }]}>
+                    <Text style={[styles.stepText, { color: textColor }]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                       {step}
                     </Text>
                   </View>
@@ -165,7 +160,8 @@ export function Onboarding({ onComplete, onSkip }: OnboardingProps) {
               <View style={styles.featuresContainer}>
                 {page.features.map((feature, featureIndex) => (
                   <View key={featureIndex} style={styles.featureItem}>
-                    <Text style={[styles.featureText, { color: textColor }]}>
+                    <Text style={[styles.featureText, { color: textColor }]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                       {feature}
                     </Text>
                   </View>
@@ -181,7 +177,8 @@ export function Onboarding({ onComplete, onSkip }: OnboardingProps) {
               onPress={handleNext}
               activeOpacity={0.8}
             >
-              <Text style={styles.buttonText}>{page.buttonText}</Text>
+              <Text style={styles.buttonText} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>{page.buttonText}</Text>
               <Ionicons name="arrow-forward" size={20} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
@@ -284,6 +281,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 32,
     paddingTop: 80,
+    maxWidth: '100%',
   },
   iconContainer: {
     flexDirection: 'row',
@@ -310,6 +308,7 @@ const styles = StyleSheet.create({
   },
   stepsContainer: {
     width: '100%',
+    maxWidth: '100%',
     marginTop: 40,
     gap: 24,
   },

@@ -59,11 +59,13 @@ export function PaymentOptionsDemo() {
     >
       {/* Вариант 1: Бутон "+ Добави валута" */}
       <View style={getVariantContainerStyle()}>
-        <Text style={[demoStyles.variantTitle, memoizedDynamicStyles.text]}>
+        <Text style={[demoStyles.variantTitle, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
           {t('demo.variant1')}
         </Text>
         <View style={demoStyles.inputGroup}>
-          <Text style={[demoStyles.label, memoizedDynamicStyles.text]}>
+          <Text style={[demoStyles.label, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
             {t('calc.received')}
           </Text>
           <View style={demoStyles.inputWrapper}>
@@ -77,12 +79,15 @@ export function PaymentOptionsDemo() {
               placeholder={t('demo.placeholder')}
               placeholderTextColor="#9CA3AF"
               keyboardType="numeric"
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
             />
             <TouchableOpacity
               style={[demoStyles.currencyButton, memoizedDynamicStyles.currencyButtonInField]}
               onPress={() => setVariant1FirstCurrency(variant1FirstCurrency === 'BGN' ? 'EUR' : 'BGN')}
             >
-              <Text style={[demoStyles.currencyText, memoizedDynamicStyles.text]}>
+              <Text style={[demoStyles.currencyText, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                 {variant1FirstCurrency === 'BGN' ? '🇧🇬' : '🇪🇺'} {variant1FirstCurrency === 'BGN' ? t('currency.lv') : t('currency.euro')}
               </Text>
               <Ionicons name="swap-horizontal" size={16} color={isDark ? '#9CA3AF' : '#6B7280'} />
@@ -102,12 +107,15 @@ export function PaymentOptionsDemo() {
                   placeholder={t('demo.placeholder')}
                   placeholderTextColor="#9CA3AF"
                   keyboardType="numeric"
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
                 />
                 <TouchableOpacity
                   style={[demoStyles.currencyButton, memoizedDynamicStyles.currencyButtonInField]}
                   onPress={() => setVariant1SecondCurrency(variant1SecondCurrency === 'BGN' ? 'EUR' : 'BGN')}
                 >
-                  <Text style={[demoStyles.currencyText, memoizedDynamicStyles.text]}>
+                  <Text style={[demoStyles.currencyText, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                     {variant1SecondCurrency === 'BGN' ? '🇧🇬' : '🇪🇺'} {variant1SecondCurrency === 'BGN' ? t('currency.lv') : t('currency.euro')}
                   </Text>
                   <Ionicons name="swap-horizontal" size={16} color={isDark ? '#9CA3AF' : '#6B7280'} />
@@ -129,7 +137,8 @@ export function PaymentOptionsDemo() {
               onPress={() => setVariant1SecondVisible(true)}
             >
               <Ionicons name="add-circle-outline" size={20} color={isDark ? '#A78BFA' : '#7C3AED'} />
-              <Text style={[demoStyles.addButtonText, { color: isDark ? '#A78BFA' : '#7C3AED' }]}>
+              <Text style={[demoStyles.addButtonText, { color: isDark ? '#A78BFA' : '#7C3AED' }]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                 {t('demo.addCurrency')}
               </Text>
             </TouchableOpacity>
@@ -139,11 +148,13 @@ export function PaymentOptionsDemo() {
 
       {/* Вариант 2: Две полета по подразбиране */}
       <View style={getVariantContainerStyle()}>
-        <Text style={[demoStyles.variantTitle, memoizedDynamicStyles.text]}>
+        <Text style={[demoStyles.variantTitle, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
           {t('demo.variant2')}
         </Text>
         <View style={demoStyles.inputGroup}>
-          <Text style={[demoStyles.label, memoizedDynamicStyles.text]}>
+          <Text style={[demoStyles.label, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
             {t('calc.received')} 1
           </Text>
           <View style={demoStyles.inputWrapper}>
@@ -157,12 +168,15 @@ export function PaymentOptionsDemo() {
               placeholder={t('demo.placeholder')}
               placeholderTextColor="#9CA3AF"
               keyboardType="numeric"
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
             />
             <TouchableOpacity
               style={[demoStyles.currencyButton, memoizedDynamicStyles.currencyButtonInField]}
               onPress={() => setVariant2FirstCurrency(variant2FirstCurrency === 'BGN' ? 'EUR' : 'BGN')}
             >
-              <Text style={[demoStyles.currencyText, memoizedDynamicStyles.text]}>
+              <Text style={[demoStyles.currencyText, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                 {variant2FirstCurrency === 'BGN' ? '🇧🇬' : '🇪🇺'} {variant2FirstCurrency === 'BGN' ? t('currency.lv') : t('currency.euro')}
               </Text>
               <Ionicons name="swap-horizontal" size={16} color={isDark ? '#9CA3AF' : '#6B7280'} />
@@ -170,7 +184,8 @@ export function PaymentOptionsDemo() {
           </View>
         </View>
         <View style={demoStyles.inputGroup}>
-          <Text style={[demoStyles.label, memoizedDynamicStyles.text]}>
+          <Text style={[demoStyles.label, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
             {t('demo.receivedOptional')}
           </Text>
           <View style={demoStyles.inputWrapper}>
@@ -184,12 +199,15 @@ export function PaymentOptionsDemo() {
               placeholder={t('demo.placeholderOptional')}
               placeholderTextColor="#9CA3AF"
               keyboardType="numeric"
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
             />
             <TouchableOpacity
               style={[demoStyles.currencyButton, memoizedDynamicStyles.currencyButtonInField]}
               onPress={() => setVariant2SecondCurrency(variant2SecondCurrency === 'BGN' ? 'EUR' : 'BGN')}
             >
-              <Text style={[demoStyles.currencyText, memoizedDynamicStyles.text]}>
+              <Text style={[demoStyles.currencyText, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                 {variant2SecondCurrency === 'BGN' ? '🇧🇬' : '🇪🇺'} {variant2SecondCurrency === 'BGN' ? t('currency.lv') : t('currency.euro')}
               </Text>
               <Ionicons name="swap-horizontal" size={16} color={isDark ? '#9CA3AF' : '#6B7280'} />
@@ -201,7 +219,8 @@ export function PaymentOptionsDemo() {
       {/* Вариант 3: Split Payment режим */}
       <View style={getVariantContainerStyle()}>
         <View style={demoStyles.splitHeader}>
-          <Text style={[demoStyles.variantTitle, memoizedDynamicStyles.text]}>
+          <Text style={[demoStyles.variantTitle, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
             {t('demo.variant3')}
           </Text>
           <TouchableOpacity
@@ -228,7 +247,8 @@ export function PaymentOptionsDemo() {
           </TouchableOpacity>
         </View>
         <View style={demoStyles.inputGroup}>
-          <Text style={[demoStyles.label, memoizedDynamicStyles.text]}>
+          <Text style={[demoStyles.label, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
             {t('calc.received')}
           </Text>
           <View style={demoStyles.inputWrapper}>
@@ -242,12 +262,15 @@ export function PaymentOptionsDemo() {
               placeholder={t('demo.placeholder')}
               placeholderTextColor="#9CA3AF"
               keyboardType="numeric"
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
             />
             <TouchableOpacity
               style={[demoStyles.currencyButton, memoizedDynamicStyles.currencyButtonInField]}
               onPress={() => setVariant3FirstCurrency(variant3FirstCurrency === 'BGN' ? 'EUR' : 'BGN')}
             >
-              <Text style={[demoStyles.currencyText, memoizedDynamicStyles.text]}>
+              <Text style={[demoStyles.currencyText, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                 {variant3FirstCurrency === 'BGN' ? '🇧🇬' : '🇪🇺'} {variant3FirstCurrency === 'BGN' ? t('currency.lv') : t('currency.euro')}
               </Text>
               <Ionicons name="swap-horizontal" size={16} color={isDark ? '#9CA3AF' : '#6B7280'} />
@@ -265,12 +288,15 @@ export function PaymentOptionsDemo() {
                 placeholder={t('demo.placeholder')}
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
               />
               <TouchableOpacity
                 style={[demoStyles.currencyButton, memoizedDynamicStyles.currencyButtonInField]}
                 onPress={() => setVariant3SecondCurrency(variant3SecondCurrency === 'BGN' ? 'EUR' : 'BGN')}
               >
-                <Text style={[demoStyles.currencyText, memoizedDynamicStyles.text]}>
+                <Text style={[demoStyles.currencyText, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                   {variant3SecondCurrency === 'BGN' ? '🇧🇬' : '🇪🇺'} {variant3SecondCurrency === 'BGN' ? t('currency.lv') : t('currency.euro')}
                 </Text>
                 <Ionicons name="swap-horizontal" size={16} color={isDark ? '#9CA3AF' : '#6B7280'} />
@@ -282,11 +308,13 @@ export function PaymentOptionsDemo() {
 
       {/* Вариант 4: Комбинирано поле */}
       <View style={getVariantContainerStyle()}>
-        <Text style={[demoStyles.variantTitle, memoizedDynamicStyles.text]}>
+        <Text style={[demoStyles.variantTitle, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
           {t('demo.variant4')}
         </Text>
         <View style={demoStyles.inputGroup}>
-          <Text style={[demoStyles.label, memoizedDynamicStyles.text]}>
+          <Text style={[demoStyles.label, memoizedDynamicStyles.text]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
             {t('calc.received')}
           </Text>
           <View style={demoStyles.combinedInputContainer}>
@@ -301,12 +329,16 @@ export function PaymentOptionsDemo() {
                 placeholder={t('demo.placeholder')}
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
               />
-              <Text style={[demoStyles.combinedCurrency, memoizedDynamicStyles.secondaryText]}>
+              <Text style={[demoStyles.combinedCurrency, memoizedDynamicStyles.secondaryText]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                 🇧🇬 {t('currency.lv')}
               </Text>
             </View>
-            <Text style={[demoStyles.combinedSeparator, memoizedDynamicStyles.secondaryText]}>
+            <Text style={[demoStyles.combinedSeparator, memoizedDynamicStyles.secondaryText]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
               +
             </Text>
             <View style={demoStyles.combinedInputWrapper}>
@@ -320,8 +352,11 @@ export function PaymentOptionsDemo() {
                 placeholder={t('demo.placeholder')}
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
+              allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}
               />
-              <Text style={[demoStyles.combinedCurrency, memoizedDynamicStyles.secondaryText]}>
+              <Text style={[demoStyles.combinedCurrency, memoizedDynamicStyles.secondaryText]} allowFontScaling={true}
+              maxFontSizeMultiplier={1.1}>
                 🇪🇺 {t('currency.euro')}
               </Text>
             </View>

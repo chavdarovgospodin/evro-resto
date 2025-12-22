@@ -13,6 +13,8 @@ export const quickAmountsStyles = StyleSheet.create({
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    maxWidth: '100%',
+    flexWrap: 'wrap',
   },
   amountButton: {
     flex: 1,
@@ -30,6 +32,8 @@ export const quickAmountsStyles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     minWidth: 40,
+    maxWidth: '48%',
+    overflow: 'hidden',
   },
   amountButtonPressed: {
     backgroundColor: '#7C3AED',

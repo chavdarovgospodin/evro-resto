@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 export const calculatorStyles = StyleSheet.create({
   container: {
     flex: 1,
+    maxWidth: '100%',
   },
   scrollView: {
     flex: 1,
@@ -11,12 +12,15 @@ export const calculatorStyles = StyleSheet.create({
     flexGrow: 1,
     paddingHorizontal: 20,
     paddingBottom: 100,
+    maxWidth: '100%',
   },
   topBar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 12,
+    maxWidth: '100%',
+    overflow: 'hidden',
   },
   exchangeRateBadge: {
     paddingHorizontal: 12,
@@ -50,9 +54,11 @@ export const calculatorStyles = StyleSheet.create({
   },
   inputsContainer: {
     width: '100%',
+    maxWidth: '100%',
   },
   inputGroup: {
     marginBottom: 18,
+    maxWidth: '100%',
   },
   inputLabel: {
     fontSize: 17,
@@ -67,6 +73,8 @@ export const calculatorStyles = StyleSheet.create({
   },
   inputWrapper: {
     position: 'relative',
+    maxWidth: '100%',
+    overflow: 'hidden',
   },
   input: {
     borderWidth: 1,
@@ -169,11 +177,14 @@ export const calculatorStyles = StyleSheet.create({
     alignItems: 'center',
     gap: 10,
     width: '100%',
+    maxWidth: '100%',
   },
   combinedInputWrapper: {
     position: 'relative',
     flex: 1,
     minWidth: 0,
+    maxWidth: '100%',
+    overflow: 'hidden',
   },
   combinedInput: {
     borderWidth: 1,
@@ -183,6 +194,7 @@ export const calculatorStyles = StyleSheet.create({
     paddingRight: 60,
     fontSize: 20,
     width: '100%',
+    maxWidth: '100%',
   },
   combinedCurrency: {
     position: 'absolute',
@@ -202,9 +214,12 @@ export const calculatorStyles = StyleSheet.create({
     flexDirection: 'row',
     gap: 8,
     marginTop: 8,
+    maxWidth: '100%',
   },
   quickAmountsColumn: {
     flex: 1,
+    maxWidth: '100%',
+    minWidth: 0,
   },
   quickAmountsLabel: {
     fontSize: 12,

@@ -2,12 +2,23 @@ import { useCallback } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { View, ActivityIndicator, StyleSheet } from 'react-native';
+import { View, ActivityIndicator, StyleSheet, Text, TextInput } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { ErrorBoundary } from 'react-error-boundary';
 import { AppProvider, useApp } from '../src/context/AppContext';
 import { ErrorFallback } from '../src/components/ErrorFallback';
 import { Onboarding } from '../src/components/Onboarding';
+
+// Limit font scaling globally to maintain consistent UI regardless of display size settings
+// Allow slight scaling (max 1.1x) to accommodate system font preferences without breaking layout
+// This prevents UI from breaking even with very large display size settings
+if (!Text.defaultProps) Text.defaultProps = {};
+Text.defaultProps.allowFontScaling = true;
+Text.defaultProps.maxFontSizeMultiplier = 1.1;
+
+if (!TextInput.defaultProps) TextInput.defaultProps = {};
+TextInput.defaultProps.allowFontScaling = true;
+TextInput.defaultProps.maxFontSizeMultiplier = 1.1;
 
 function RootLayoutNav() {
   const { isLoading, isDark, showOnboarding, completeOnboarding } = useApp();
